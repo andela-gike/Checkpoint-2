@@ -1,11 +1,23 @@
-const documentRoutes = require('./documents');
-const roleRoutes = require('./role');
-const userRoutes = require('./users');
+import express from 'express';
+import logger from 'morgan';
+import bodyParser from 'body-parser';
+import documentRouter from './documentRoutes';
+import roleRouter from './roleRoutes';
+import userRouter from './userRoutes';
 
-const router = (app) => {
-  app.use('api/documents', documentRoutes);
-  app.use('api/role', roleRoutes);
-  app.use('api/users', userRoutes);
-};
+const app = express();
 
-module.exports = router;
+app.use(logger('dev'));
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.get('/', (req, res) => {
+  res.status(200).send({ message: 'Welcome to Hati!' });
+});
+
+app.use('/users', userRouter);
+app.use('/documents', documentRouter);
+app.use('/roles', roleRouter);
+
+export default app;

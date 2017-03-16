@@ -1,22 +1,14 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const logger = require('morgan');
+import dotenv from 'dotenv';
+import app from './server/routes/index';
 
-require('dotenv').config();
+dotenv.config({ silent: true });
 
-const app = express(); // setup express app
-const port = process.env.PORT || 6000;
-// parse incoming request data
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+const port = process.env.PORT || 6060;
 
-
-// setup a default catch-all route to send back message
-require('./server/routes')(app);
-
-app.listen(port, () => {
-  console.log(`The magic happens on port ${port}`);
+app.listen(port, (error) => {
+  if (!error) {
+    console.log(`App listening on port ${port}...`);
+  } else {
+    console.log('error');
+  }
 });
-
-module.exports = app;
