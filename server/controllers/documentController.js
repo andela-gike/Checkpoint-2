@@ -1,7 +1,8 @@
 import db from '../models';
 
-class DocumentController {
-  static createDocument(req, res) {
+
+const DocumentController = {
+  createDocument(req, res) {
     db.documents
       .create({
         title: req.body.title,
@@ -10,20 +11,20 @@ class DocumentController {
         userId: req.decodedToken.userId,
         userRoleId: req.decodedToken.roleId
       })
-     .then((document) => {
-       res.status(201).send({
-         message: 'Document created successfully',
-         data: document
-       });
-     })
-     .catch((err) => {
-       res.status(400).send({
-         message: 'There was an error while creating the document', err
-       });
-     });
-  }
+      .then((document) => {
+        res.status(201).send({
+          message: 'Document created successfully',
+          data: document
+        });
+      })
+      .catch((err) => {
+        res.status(400).send({
+          message: 'There was an error while creating the document', err
+        });
+      });
+  },
 
-  static updateDocument(req, res) {
+  updateDocument(req, res) {
     db.documents
       .findById(req.params.id)
       .then((doc) => {
@@ -36,19 +37,19 @@ class DocumentController {
             content: req.body.content || doc.content,
             access: req.body.access || doc.access
           })
-          .then((updatedDoc) => {
-            return res.status(200).send({
-              message: 'The document was updated successfully',
-              data: updatedDoc
+            .then((updatedDoc) => {
+              return res.status(200).send({
+                message: 'The document was updated successfully',
+                data: updatedDoc
+              });
             });
-          });
         } else {
           res.status(401).send({ message: 'Permission denied' });
         }
       });
-  }
+  },
 
-  static deleteDocument(req, res) {
+  deleteDocument(req, res) {
     db.documents
       .findById(req.params.id)
       .then((doc) => {
@@ -57,24 +58,24 @@ class DocumentController {
         }
         if (parseInt(doc.userId, 10) === req.decodedToken.userId) {
           doc.destroy()
-          .then(() => {
-            res.status(200).send({
-              message: 'The document was deleted successfully'
+            .then(() => {
+              res.status(200).send({
+                message: 'The document was deleted successfully'
+              });
             });
-          })
         } else {
           res.status(401).send({
             message: ' Permission denied'
           });
         }
       });
-  }
+  },
 
-  static listAllDocuments(req, res) {
+  listAllDocuments(req, res) {
     const docAttributes = {
       doc: ['id', 'title', 'content', 'access', 'userId', 'createdAt', 'updatedAt'],
       user: ['id', 'username']
-    }
+    };
     let query;
     if (req.decodedToken.roleId === 1) {
       query = { where: {} };
@@ -104,9 +105,9 @@ class DocumentController {
       .then((docs) => {
         res.status(200).send({ message: docs });
       });
-  }
+  },
 
-  static getSpecificDocument(req, res) {
+  getSpecificDocument(req, res) {
     db.documents
       .findById(req.params.id)
       .then((doc) => {
@@ -121,9 +122,9 @@ class DocumentController {
         }
         res.status(401).send({ message: 'Permission denied' });
       });
-  }
+  },
 
-  static searchDocument(req, res) {
+  searchDocument(req, res) {
     if (!req.query.query) {
       return res.send({ message: 'Search cannot be empty' });
     }
@@ -134,10 +135,12 @@ class DocumentController {
             $or: [
               { access: 'public' },
               { ownerId: req.decodedToken.userId },
-              { $and: [
-                { access: 'role' },
-                { ownerRoleId: req.decodedToken.roleId }
-              ] }
+              {
+                $and: [
+                  { access: 'role' },
+                  { ownerRoleId: req.decodedToken.roleId }
+                ]
+              }
             ]
           },
           {
@@ -158,6 +161,6 @@ class DocumentController {
         res.status(200).send({ message: queriedDoc });
       });
   }
-}
+};
 
 export default DocumentController;

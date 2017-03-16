@@ -6,30 +6,38 @@ dotenv.config({ silent: true });
 
 const secret = process.env.SECRET || 'Happypeopledontkeepsecret';
 
-class UserController {
-  static createNewUser(req, res) {
-    db.users
-      .create(req.body)
-      .then((user) => {
-        const payload = {
-          userId: user.id,
-          roleId: user.roleId
-        };
-        const token = jwt.sign(payload, secret, { expiresIn: '24h' });
-        return res.status(201).send({
-          message: 'User was successfully created',
-          token,
-          data: user
-        });
-      })
-      .catch((err) => {
-        res.status(400).send({
-          message: err.message
-        });
+const UserController = {
+  createNewUser(req, res) {
+    db.users.findOne({ where: { email: req.body.email } })
+      .then((userExists) => {
+        if (userExists) {
+          return res.status(400).send({
+            message: 'There is a user already existing with this email'
+          });
+        }
+        db.users
+          .create(req.body)
+          .then((user) => {
+            const payload = {
+              userId: user.id,
+              roleId: user.roleId
+            };
+            const token = jwt.sign(payload, secret, { expiresIn: '24h' });
+            return res.status(201).send({
+              message: 'User was successfully created',
+              token,
+              data: user
+            });
+          })
+          .catch((err) => {
+            res.status(400).send({
+              message: err.message
+            });
+          });
       });
-  }
+  },
 
-  static loginUser(req, res) {
+  loginUser(req, res) {
     db.users
       .findOne({
         where: {
@@ -55,9 +63,9 @@ class UserController {
           message: `There was a problem while logging in ${err.message}`,
         });
       });
-  }
+  },
 
-  static findUserById(req, res) {
+  findUserById(req, res) {
     const userDetails = {
       user: ['id', 'firstName', 'lastName', 'email', 'username'],
       role: ['id', 'title']
@@ -86,9 +94,9 @@ class UserController {
           message: `User ${req.params.id} was not found`
         });
       });
-  }
+  },
 
-  static listAllUsers(req, res) {
+  listAllUsers(req, res) {
     const userDetails = {
       user: ['id', 'firstName', 'lastName', 'email', 'username'],
       role: ['id', 'title']
@@ -117,9 +125,9 @@ class UserController {
           message: 'There was a problem getting all users'
         });
       });
-  }
+  },
 
-  static updateUser(req, res) {
+  updateUser(req, res) {
     db.users
       .findById(req.params.id)
       .then((user) => {
@@ -146,9 +154,9 @@ class UserController {
           });
         }
       });
-  }
+  },
 
-  static deleteUser(req, res) {
+  deleteUser(req, res) {
     db.users
       .findById(req.params.id)
       .then((user) => {
@@ -168,9 +176,9 @@ class UserController {
           });
         }
       });
-  }
+  },
 
-  static listUserDocuments(req, res) {
+  listUserDocuments(req, res) {
     const userDetails = {
       user: ['id', 'firstName', 'lastName', 'email', 'username'],
       doc: ['id', 'title', 'content']
@@ -183,13 +191,13 @@ class UserController {
         }
         res.status(200).send({ message: user });
       });
-  }
+  },
 
-  static logoutUser(req, res) {
+  logoutUser(req, res) {
     res.status(200).send({
       message: 'You were logged out successfully'
     });
   }
-}
+};
 
 export default UserController;

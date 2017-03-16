@@ -27,9 +27,8 @@ module.exports = (sequelize, DataTypes) => {
     classMethods: {
       associate: (models) => {
         documents.belongsTo(models.users, {
-          as: 'Owner',
           onDelete: 'CASCADE',
-          foreignKey: { allowNull: true }
+          foreignKey: 'userId'
         });
       }
     }
