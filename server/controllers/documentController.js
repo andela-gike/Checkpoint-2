@@ -2,7 +2,7 @@ import db from '../models';
 
 
 const DocumentController = {
-  createDocument(req, res) {
+  createNewDocument(req, res) {
     db.documents
       .create({
         title: req.body.title,
@@ -29,7 +29,10 @@ const DocumentController = {
       .findById(req.params.id)
       .then((doc) => {
         if (!doc) {
-          return res.status(404).send({ message: 'The document was not found' });
+          return res.status(404).send({
+            message:
+            'The document was not found'
+          });
         }
         if (parseInt(doc.userId, 10) === req.decodedToken.userId) {
           doc.update({
@@ -37,12 +40,10 @@ const DocumentController = {
             content: req.body.content || doc.content,
             access: req.body.access || doc.access
           })
-            .then((updatedDoc) => {
-              return res.status(200).send({
-                message: 'The document was updated successfully',
-                data: updatedDoc
-              });
-            });
+            .then(updatedDoc => res.status(200).send({
+              message: 'The document was updated successfully',
+              data: updatedDoc
+            }));
         } else {
           res.status(401).send({ message: 'Permission denied' });
         }
@@ -54,7 +55,10 @@ const DocumentController = {
       .findById(req.params.id)
       .then((doc) => {
         if (!doc) {
-          return res.status(404).send({ message: 'The document was not found' });
+          return res.status(404).send({
+            message:
+            'The document was not found'
+          });
         }
         if (parseInt(doc.userId, 10) === req.decodedToken.userId) {
           doc.destroy()
@@ -73,7 +77,8 @@ const DocumentController = {
 
   listAllDocuments(req, res) {
     const docAttributes = {
-      doc: ['id', 'title', 'content', 'access', 'userId', 'createdAt', 'updatedAt'],
+      doc: ['id', 'title', 'content', 'access',
+        'userId', 'createdAt', 'updatedAt'],
       user: ['id', 'username']
     };
     let query;
@@ -112,13 +117,26 @@ const DocumentController = {
       .findById(req.params.id)
       .then((doc) => {
         if (!doc) {
-          return res.status(404).send({ message: 'The document was not found' });
+          return res.status(404).send({
+            message:
+            'The document was not found'
+          });
         }
-        if (doc.access === 'public' || doc.userId === req.decodedToken.userId) {
-          return res.status(200).send({ message: "Document found!", data: doc });
+        if (doc.access === 'public' || doc.userId ===
+          req.decodedToken.userId) {
+          return res.status(200).send({
+            message:
+            'Document found!',
+            data: doc
+          });
         }
-        if (doc.access === 'role' && doc.userRoleId === req.decodedToken.roleId) {
-          return res.status(200).send({ message: "Document found!", data: doc });
+        if (doc.access === 'role' && doc.userRoleId ===
+          req.decodedToken.roleId) {
+          return res.status(200).send({
+            message:
+            'Document found!',
+            data: doc
+          });
         }
         res.status(401).send({ message: 'Permission denied' });
       });

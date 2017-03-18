@@ -1,7 +1,7 @@
 import db from '../models';
 
-class RoleController {
-  static createRole(req, res) {
+const RoleController = {
+  createNewRole(req, res) {
     let roleInfo = {};
     if (req.body.id) {
       roleInfo = { title: req.body.title, id: req.body.id };
@@ -9,19 +9,23 @@ class RoleController {
     db.roles
       .create(roleInfo)
       .then((role) => {
-        res.status(200).send({ message: 'The role was created successfully', role });
+        res.status(200).send({
+          message:
+          'The role was created successfully',
+          role
+        });
       })
       .catch((err) => {
-        res.status(400).send({ message: 'error', err })
+        res.status(400).send({ message: 'error', err });
       });
-  }
+  },
 
-  static updateRole(req, res) {
+  updateRole(req, res) {
     db.roles
       .findById(req.params.id)
       .then((role) => {
         if (!role) {
-          return res.status(404).send({ message: 'Role was not found'});
+          return res.status(404).send({ message: 'Role was not found' });
         }
         role.update({
           title: req.body.title || role.title
@@ -30,9 +34,9 @@ class RoleController {
           res.status(200).send({ message: updatedRole });
         });
       });
-  }
+  },
 
-  static deleteRole(req, res) {
+  deleteRole(req, res) {
     db.roles
       .findById(req.params.id)
       .then((role) => {
@@ -44,20 +48,23 @@ class RoleController {
           res.status(200).send({ message: 'Role was successfully deleted' });
         });
       });
-  }
+  },
 
-  static listAllRoles(req, res) {
+  listAllRoles(req, res) {
     db.roles
       .findAll()
       .then((allRoles) => {
         if (!allRoles) {
-          return res.status(404).send({ message: 'A problem was encountered while getting roles' })
+          return res.status(404).send({
+            message:
+            'A problem was encountered while getting roles'
+          });
         }
         res.status(200).send({ message: allRoles });
       });
-  }
+  },
 
-  static getSpecificRole(req, res) {
+  getSpecificRole(req, res) {
     db.roles
       .findById(req.params.id)
       .then((role) => {
@@ -67,6 +74,6 @@ class RoleController {
         res.status(200).send({ message: role });
       });
   }
-}
+};
 
 export default RoleController;

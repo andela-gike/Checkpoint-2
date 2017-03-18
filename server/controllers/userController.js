@@ -1,10 +1,13 @@
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
+import moment from 'moment';
 import db from '../models';
 
 dotenv.config({ silent: true });
 
 const secret = process.env.SECRET || 'Happypeopledontkeepsecret';
+const expires = moment().add(1, 'days').valueOf();
+
 
 const UserController = {
   createNewUser(req, res) {
@@ -22,7 +25,7 @@ const UserController = {
               userId: user.id,
               roleId: user.roleId
             };
-            const token = jwt.sign(payload, secret, { expiresIn: '24h' });
+            const token = jwt.sign(payload, secret, { expiresIn: expires });
             return res.status(201).send({
               message: 'User was successfully created',
               token,
@@ -50,11 +53,11 @@ const UserController = {
             userId: user.id,
             roleId: user.roleId
           };
-          const token = jwt.sign(payload, secret, { expiresIn: '24h' });
+          const token = jwt.sign(payload, secret, { expiresIn: expires });
           return res.status(200).send({
             message: 'You were successfully logged in',
             token,
-            expiresIn: '24h'
+            expiresIn: expires
           });
         }
       })
@@ -184,7 +187,10 @@ const UserController = {
       doc: ['id', 'title', 'content']
     };
     db.users
-      .findAll({ where: { id: req.params.id }, include: [{ model: db.documents, attributes: userDetails.doc }] })
+      .findAll({
+        where: { id: req.params.id },
+        include: [{ model: db.documents, attributes: userDetails.doc }]
+      })
       .then((user) => {
         if (!user) {
           return res.status(404).send({ message: 'User was not found' });

@@ -6,9 +6,10 @@ const documentRouter = express.Router();
 
 documentRouter.route('/')
   .get(Authentication.verifyUser, DocumentController.listAllDocuments)
-  .post(Authentication.verifyUser, DocumentController.createDocument);
+  .post(Authentication.verifyUser, DocumentController.createNewDocument);
 
-documentRouter.get('/search', Authentication.verifyUser, DocumentController.searchDocument);
+documentRouter.get('/search', Authentication.verifyUser,
+  DocumentController.searchDocument);
 
 documentRouter.route('/:id')
   .get(Authentication.verifyUser, DocumentController.getSpecificDocument)
