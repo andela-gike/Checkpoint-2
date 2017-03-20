@@ -1,5 +1,5 @@
 import express from 'express';
-import DocumentController from '../controllers/documentController';
+import DocumentController from '../controllers/DocumentController';
 import Authentication from '../middleware/authentication';
 
 const documentRouter = express.Router();

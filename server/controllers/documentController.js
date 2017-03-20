@@ -3,24 +3,44 @@ import db from '../models';
 
 const DocumentController = {
   createNewDocument(req, res) {
-    db.documents
-      .create({
-        title: req.body.title,
-        content: req.body.content,
-        access: req.body.access || 'public',
-        userId: req.decodedToken.userId,
-        userRoleId: req.decodedToken.roleId
-      })
-      .then((document) => {
-        res.status(201).send({
-          message: 'Document created successfully',
-          data: document
-        });
-      })
-      .catch((err) => {
-        res.status(400).send({
-          message: 'There was an error while creating the document', err
-        });
+    if (!req.body.title) {
+      return res.status(400).send({
+        message:
+        'Title field cannot be left blank'
+      });
+    }
+    if (!req.body.content) {
+      return res.status(400).send({
+        message:
+        'Content field cannot be left blank'
+      });
+    }
+    db.documents.findOne({ where: { title: req.body.title } })
+      .then((documentExists) => {
+        if (documentExists) {
+          return res.status(400).send({
+            message: 'This document already exists'
+          });
+        }
+        db.documents
+          .create({
+            title: req.body.title,
+            content: req.body.content,
+            access: req.body.access || 'public',
+            userId: req.decodedToken.userId,
+            userRoleId: req.decodedToken.roleId
+          })
+          .then((document) => {
+            res.status(201).send({
+              message: 'Document created successfully',
+              data: document
+            });
+          })
+          .catch((err) => {
+            res.status(400).send({
+              message: 'There was an error while creating the document', err
+            });
+          });
       });
   },
 
