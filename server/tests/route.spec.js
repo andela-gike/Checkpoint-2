@@ -1,5 +1,19 @@
 import chai from 'chai';
-import dotenv from 'dotenv';
-import request from 'supertest';
+import supertest from 'supertest';
 import app from '../routes/index';
 
+
+const request = supertest.agent(app);
+const should = chai.should();
+
+
+describe('/GET Index Route', () => {
+  it('should return the welcome message', (done) => {
+    request.get('/')
+    .end((err, res) => {
+      res.status.should.equal(200);
+      res.body.message.should.equal('Welcome to DOCMAN bot!');
+      done();
+    });
+  });
+});
