@@ -1,77 +1,84 @@
 import db from '../models';
 
 const RoleController = {
-  createNewRole(req, res) {
-    let roleInfo = {};
-    if (req.body.id) {
-      roleInfo = { title: req.body.title, id: req.body.id };
-    } else { roleInfo = { title: req.body.title }; }
+  createNewRole(request, response) {
+    let roleData = {};
+    if (request.body.id) {
+      roleData = { title: request.body.title, id: request.body.id };
+    } else { roleData = { title: request.body.title }; }
+    if (!request.body.title) {
+      return response.status(400).send({ message: 'Title cannot be blank' });
+    }
     db.roles
-      .create(roleInfo)
+      .create(roleData)
       .then((role) => {
-        res.status(200).send({
+        response.status(200).send({
           message:
-          'The role was created successfully',
+          'The role was successfully created',
           role
         });
       })
       .catch((err) => {
-        res.status(400).send({ message: 'error', err });
+        response.status(400).send({ message: 'error', err });
       });
   },
 
-  updateRole(req, res) {
+  updateRole(request, response) {
     db.roles
-      .findById(req.params.id)
+      .findById(request.params.id)
       .then((role) => {
         if (!role) {
-          return res.status(404).send({ message: 'Role was not found' });
+          return response.status(404).send({ message: 'Role was not found' });
         }
         role.update({
-          title: req.body.title || role.title
+          title: request.body.title || role.title
         })
         .then((updatedRole) => {
-          res.status(200).send({ message: updatedRole });
+          response.status(200).send({
+            message: 'Role was successfully updated',
+            Role: updatedRole
+          });
         });
       });
   },
 
-  deleteRole(req, res) {
+  deleteRole(request, response) {
     db.roles
-      .findById(req.params.id)
+      .findById(request.params.id)
       .then((role) => {
         if (!role) {
-          return res.status(404).send({ message: 'Role was not found' });
+          return response.status(404).send({ message: 'Role was not found' });
         }
         role.destroy()
         .then(() => {
-          res.status(200).send({ message: 'Role was successfully deleted' });
+          response.status(200)
+            .send({ message: 'Role was successfully deleted' });
         });
       });
   },
 
-  listAllRoles(req, res) {
+  listAllRoles(request, response) {
     db.roles
       .findAll()
       .then((allRoles) => {
         if (!allRoles) {
-          return res.status(404).send({
+          return response.status(404).send({
             message:
             'A problem was encountered while getting roles'
           });
         }
-        res.status(200).send({ message: allRoles });
+        response.status(200).send({ message: allRoles });
       });
   },
 
-  getSpecificRole(req, res) {
+  getSpecificRole(request, response) {
     db.roles
-      .findById(req.params.id)
+      .findById(request.params.id)
       .then((role) => {
         if (!role) {
-          return res.status(404).send({ message: 'Role was not found' });
+          return response.status(404).send({ message: 'Role was not found' });
         }
-        res.status(200).send({ message: role });
+        response.status(200).send({ message: role });
       });
   }
 };
