@@ -1,10 +1,14 @@
 import chai from 'chai';
 import dotenv from 'dotenv';
 import supertest from 'supertest';
-import app from '../routes/index';
+import app from '../../routes/index';
+import helper from '../helpers';
+
 
 const request = supertest.agent(app);
 const should = chai.should();
+const users = helper.adminUser;
+const invalidUser = helper.regularUser4;
 
 describe('User Routes Spec', () => {
   let adminUserToken;

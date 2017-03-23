@@ -1,6 +1,6 @@
 import chai from 'chai';
 import supertest from 'supertest';
-import app from '../routes/index';
+import app from '../../routes/index';
 
 const request = supertest.agent(app);
 const should = chai.should();

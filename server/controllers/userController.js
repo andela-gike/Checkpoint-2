@@ -48,6 +48,16 @@ const UserController = {
         }
       })
       .then((user) => {
+        if (!user) {
+          return res.status(403).send({
+            message: 'User was not found'
+          });
+        }
+        if (!user.validatePassword(req.body.password)) {
+          return res.status(401).send({
+            message: 'Invalid password',
+          });
+        }
         if (user && user.validatePassword(req.body.password)) {
           const payload = {
             userId: user.id,
@@ -63,7 +73,9 @@ const UserController = {
       })
       .catch((err) => {
         res.status(401).send({
-          message: `There was a problem while logging in ${err.message}`,
+          message:
+          'There was a problem while logging in due to invalid credentials',
+          err
         });
       });
   },
@@ -94,7 +106,7 @@ const UserController = {
       })
       .catch((err) => {
         res.status(404).send({
-          message: `User ${req.params.id} was not found`
+          message: `User ${req.params.id} was not found`, err
         });
       });
   },
@@ -125,7 +137,8 @@ const UserController = {
       })
       .catch((err) => {
         res.status(404).send({
-          message: 'There was a problem getting all users'
+          message: 'There was a problem getting all users',
+          err
         });
       });
   },
@@ -142,18 +155,19 @@ const UserController = {
             firstName: req.body.firstName || user.firstName,
             lastName: req.body.lastName || user.lastName,
             email: req.body.email || user.email,
-            username: req.body.username || user.username,
+            userName: req.body.userName || user.userName,
             password: req.body.password || user.password
           })
           .then((updatedProfile) => {
             res.status(200).send({
-              message: 'Information updated successfully',
+              message: 'User information updated successfully',
               data: updatedProfile
             });
           });
         } else {
           res.status(404).send({
-            message: 'User was not found'
+            message:
+              'Cannot update the information of a user that does not exist'
           });
         }
       });
@@ -175,7 +189,7 @@ const UserController = {
           });
         } else {
           res.status(404).send({
-            message: 'User was not found'
+            message: 'Cannot delete a user that does not exist'
           });
         }
       });
@@ -193,7 +207,10 @@ const UserController = {
       })
       .then((user) => {
         if (!user) {
-          return res.status(404).send({ message: 'User was not found' });
+          return res.status(404).send({
+            message:
+                'Cannot get the documents of a user that does not exist'
+          });
         }
         res.status(200).send({ message: user });
       });

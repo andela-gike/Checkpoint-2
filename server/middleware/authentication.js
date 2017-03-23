@@ -6,9 +6,10 @@ dotenv.config({ silent: true });
 
 const secret = process.env.SECRET || 'Happypeopledontkeepsecret';
 
-class Authentication {
-  static verifyUser(req, res, next) {
-    const token = req.body.token || req.query.token || req.headers.authorization || req.headers['x-access-token'];
+const Authentication = {
+  verifyUser(req, res, next) {
+    const token = req.body.token || req.query.token ||
+      req.headers.authorization || req.headers['x-access-token'];
     if (!token) {
       return res.status(401).send({ message: 'Verification failed' });
     }
@@ -20,22 +21,29 @@ class Authentication {
         next();
       }
     });
-  }
+  },
 
-  static verifyAdmin(req, res, next) {
+  verifyAdmin(req, res, next) {
     db.roles
       .findById(req.decodedToken.roleId)
       .then((role) => {
         if (role.title === 'admin' || role.id === 1) {
           next();
         } else {
-          return res.status(403).send({ message: 'Permission denied, admin only' });
+          return res.status(403).send({
+            message:
+            'Permission denied, admin only'
+          });
         }
       });
-  }
+  },
 
-  static logout(req, res, next) {
-    const token = req.headers.token || req.headers.authorization || req.headers['x-access-token'];
+  logout(req, res, next) {
+    const token = req.headers.token || req.headers.authorization ||
+      req.headers['x-access-token'];
+    if (!token) {
+      return res.status(401).send({ message: 'You must be logged in' });
+    }
     const decoded = req.decodedToken;
     if (token && decoded) {
       delete req.headers.token;
@@ -45,6 +53,6 @@ class Authentication {
       next();
     }
   }
-}
+};
 
 export default Authentication;

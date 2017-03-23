@@ -51,7 +51,7 @@ const DocumentController = {
         if (!doc) {
           return res.status(404).send({
             message:
-            'The document was not found'
+            'Cannot update a document that does not exist'
           });
         }
         if (parseInt(doc.userId, 10) === req.decodedToken.userId) {
@@ -77,7 +77,7 @@ const DocumentController = {
         if (!doc) {
           return res.status(404).send({
             message:
-            'The document was not found'
+            'Cannot delete a document that does not exist'
           });
         }
         if (parseInt(doc.userId, 10) === req.decodedToken.userId) {
@@ -139,7 +139,7 @@ const DocumentController = {
         if (!doc) {
           return res.status(404).send({
             message:
-            'The document was not found'
+            `Document with the id: ${req.params.id} does not exit`
           });
         }
         if (doc.access === 'public' || doc.userId ===
@@ -164,7 +164,7 @@ const DocumentController = {
 
   searchDocument(req, res) {
     if (!req.query.query) {
-      return res.send({ message: 'Search cannot be empty' });
+      return res.send({ message: 'Search field cannot be empty' });
     }
     const query = {
       where: {
