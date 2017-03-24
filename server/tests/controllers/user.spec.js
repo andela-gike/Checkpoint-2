@@ -1,14 +1,14 @@
 import chai from 'chai';
-import dotenv from 'dotenv';
 import supertest from 'supertest';
 import app from '../../routes/index';
-import helper from '../helpers';
+import helpers from '../helpers/helpers';
 
 
 const request = supertest.agent(app);
 const should = chai.should();
-const users = helper.adminUser;
-const invalidUser = helper.regularUser4;
+const users = helpers.legitUsers;
+const invalidUser = helpers.invalidUsers;
+
 
 describe('User Routes Spec', () => {
   let adminUserToken;
@@ -62,7 +62,7 @@ describe('User Routes Spec', () => {
     });
     it('should not register user with an already existing email', (done) => {
       request.post('/users')
-        .send(user[2])
+        .send(users[2])
         .end((err, response) => {
           response.status.should.equal(409);
           response.body.message.should.equal('Email already exists');
