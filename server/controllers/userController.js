@@ -1,9 +1,7 @@
-import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import moment from 'moment';
 import db from '../models';
 
-dotenv.config({ silent: true });
 
 const secret = process.env.SECRET || 'Happypeopledontkeepsecret';
 const expires = moment().add(1, 'days').valueOf();
@@ -11,14 +9,25 @@ const expires = moment().add(1, 'days').valueOf();
 
 const UserController = {
   createNewUser(req, res) {
-    db.users.findOne({ where: { email: req.body.email } })
+    const firstName = req.body.fName;
+    const lastName = req.body.lName;
+    const email = req.body.email;
+    const userName = req.body.username;
+    const password = req.body.password;
+    if (!firstName || !lastName || !email || !userName || !password) {
+      return res.status(400).send({
+        message: 'The paramaters are incomplete',
+      });
+    }
+    db.users.findOne({ where: { $or: { email, userName } } })
       .then((userExists) => {
         if (userExists) {
           return res.status(400).send({
-            message: 'There is a user already existing with this email'
+            message: `There is a user already existing
+            with this email or username`
           });
         }
-        db.users
+        return db.users
           .create(req.body)
           .then((user) => {
             const payload = {
@@ -34,7 +43,7 @@ const UserController = {
           })
           .catch((err) => {
             res.status(400).send({
-              message: err.message
+              message: 'There was a problem creating this user', err
             });
           });
       });

@@ -9,7 +9,18 @@ const RoleController = {
     if (!req.body.title) {
       return res.status(400).send({ message: 'Title cannot be blank' });
     }
-    db.roles
+    const title = req.body.title;
+    db.roles.findOne({
+      where: { title }
+    })
+    .then((result) => {
+      if (result) {
+        return res.status(409).send({
+          success: false,
+          message: 'Role already exists'
+        });
+      }
+      return db.roles
       .create(roleData)
       .then((role) => {
         res.status(200).send({
@@ -21,6 +32,7 @@ const RoleController = {
       .catch((err) => {
         res.status(400).send({ message: 'error', err });
       });
+    });
   },
 
   updateRole(req, res) {

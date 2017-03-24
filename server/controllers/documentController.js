@@ -54,6 +54,11 @@ const DocumentController = {
             'Cannot update a document that does not exist'
           });
         }
+        if (!req.body.title && !req.body.content) {
+          return res.status(406).send({
+            message: 'No update was done'
+          });
+        }
         if (parseInt(doc.userId, 10) === req.decodedToken.userId) {
           doc.update({
             title: req.body.title || doc.title,

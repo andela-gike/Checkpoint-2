@@ -1,9 +1,12 @@
 import chai from 'chai';
 import supertest from 'supertest';
 import app from '../../routes/index';
+import helpers from '../helpers/helpers';
 
 const request = supertest.agent(app);
 const should = chai.should();
+const docs = helpers.legitDocs;
+const users = helpers.legitUsers;
 
 describe('Document API Spec', () => {
   let adminUserToken;
@@ -33,9 +36,9 @@ describe('Document API Spec', () => {
       request.post('/documents')
         .set('authorization', regularUserToken)
         .send(docs[0])
-        .end((err, res) => {
-          res.status.should.equal(201);
-          res.body.message.should.equal('Document created successfully');
+        .end((err, response) => {
+          response.status.should.equal(201);
+          response.body.message.should.equal('Document created successfully');
           done();
         });
     });
@@ -57,7 +60,8 @@ describe('Document API Spec', () => {
         })
         .end((err, response) => {
           response.status.should.equal(400);
-          response.body.message.should.equal('Title field cannot be blank');
+          response.body.message.should
+          .equal('Title field cannot be left blank');
           done();
         });
     });
@@ -70,7 +74,8 @@ describe('Document API Spec', () => {
         })
         .end((err, response) => {
           response.status.should.equal(400);
-          response.body.message.should.equal('Content field cannot be blank');
+          response.body.message.should
+          .equal('Content field cannot left be blank');
           done();
         });
     });
@@ -99,7 +104,7 @@ describe('Document API Spec', () => {
           content: '',
         })
         .end((err, response) => {
-          response.status.should.equal(406);
+          response.status.should.equal(404);
           response.body.message.should.equal('No update detected');
           done();
         });
