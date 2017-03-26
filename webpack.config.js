@@ -1,33 +1,54 @@
-import path from 'path';
-import webpack from 'webpack';
+const webpack = require('webpack');
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-export default {
-
-  entry: {
-    main: [
-      'webpack-hot-middleware/client?reload=true',
-      path.join(__dirname, 'client/main.js'),
-    ]
-  },
+module.exports = {
+  devtool: 'source-map',
+  entry: [
+    'eventsource-polyfill',
+    'webpack-hot-middleware/client?reload=true',
+    path.join(__dirname, 'client/index')
+  ],
+  target: 'web',
   output: {
-    path: path.join(),
+    path: path.join(__dirname, '/dist/'),
+    publicPath: '/',
+    filename: 'bundle.js'
   },
-  watch: true,
+  devServer: {
+    contentBase: path.resolve(__dirname, 'client')
+  },
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.LoaderOptionsPlugin({
+      debug: true
+    }),
+    new HtmlWebpackPlugin({
+      template: 'client/index.html',
+      inject: 'body',
+      filename: 'index.html'
+    })
+  ],
   module: {
-    preLoaders: [{
-      test: /\.jsx$|\.js$/,
-      loader: 'eslint-loader',
-      include: `${__dirname}/src/`
-    }],
     loaders: [{
       test: /\.jsx?$/,
-      include: path.join(__dirname, 'src'),
-      loader: 'babel-loader',
       exclude: /node_modules/,
-      query: {
-        presets: ['es2015', 'react']
-      }
-    }]
+      loader: 'babel-loader?-babelrc,+cacheDirectory,presets[]=es2015,presets[]=stage-2,presets[]=react',
+      // query: {
+      //   presets: ['es2015', 'stage-2', 'react']
+      // }
+    }, {
+      test: /\.json?$/,
+      loader: 'json'
+    // }, {
+    //   test: /\.(png|jpg)$/,
+    //   loader: 'file?name=[path][name].[ext]&context=./app/shared/images'
+    }
+    // {
+    //   test: /\.css$/,
+    //   loader: ExtractTextPlugin.extract('style', 'css?modules&localIdentName=[name]---[local]---[hash:base64:5]!postcss')
+    // }
+    ]
   }
-
 };

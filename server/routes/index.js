@@ -13,11 +13,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/', (req, res) => {
-  res.status(200).send({ message: 'Welcome to DOCMAN bot!' });
+  res.status(200).send({ message: 'Welcome to DOCMAN-bot!' });
 });
 
-app.use('/users', userRouter);
-app.use('/documents', documentRouter);
-app.use('/roles', roleRouter);
+app.use('/api/users', userRouter);
+app.use('/api/documents', documentRouter);
+app.use('/api/roles', roleRouter);
 
 export default app;
