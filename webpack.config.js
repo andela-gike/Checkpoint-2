@@ -1,26 +1,38 @@
-const webpack = require('webpack');
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+import webpack from 'webpack';
+import path from 'path';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 
-module.exports = {
-  devtool: 'source-map',
+
+export default {
+  devtool: 'cheap-module-eval-source-map',
   entry: [
-    'eventsource-polyfill',
-    'webpack-hot-middleware/client?reload=true',
-    path.join(__dirname, 'client/index')
+    'eventsource-polyfill', // necessary for hot reloading with IE
+    'webpack-hot-middleware/client?reload=true', // note that it reloads the page if hot module reloading fails.
+    './client/index'
   ],
   target: 'web',
   output: {
-    path: path.join(__dirname, '/dist/'),
+    path: `${__dirname}/dist`, // Note: Physical files are only output by the production build task `npm run build`.
     publicPath: '/',
     filename: 'bundle.js'
   },
   devServer: {
-    contentBase: path.resolve(__dirname, 'client')
+    contentBase: './client'
+  },
+  resolve: {
+    alias: {
+      jquery: path.resolve(__dirname, 'node_modules/jquery/dist/jquery.js')
+    }
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.NoErrorsPlugin(),
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery',
+      Hammer: 'hammerjs/hammer'
+    }),
     new webpack.LoaderOptionsPlugin({
       debug: true
     }),
@@ -31,24 +43,27 @@ module.exports = {
     })
   ],
   module: {
-    loaders: [{
-      test: /\.jsx?$/,
-      exclude: /node_modules/,
-      loader: 'babel-loader?-babelrc,+cacheDirectory,presets[]=es2015,presets[]=stage-2,presets[]=react',
-      // query: {
-      //   presets: ['es2015', 'stage-2', 'react']
-      // }
-    }, {
-      test: /\.json?$/,
-      loader: 'json'
-    // }, {
-    //   test: /\.(png|jpg)$/,
-    //   loader: 'file?name=[path][name].[ext]&context=./app/shared/images'
-    }
-    // {
-    //   test: /\.css$/,
-    //   loader: ExtractTextPlugin.extract('style', 'css?modules&localIdentName=[name]---[local]---[hash:base64:5]!postcss')
-    // }
+    loaders: [
+      { test: /\.js$/, include: path.join(__dirname, 'client/'), loaders: ['babel-loader'] },
+      { test: /(\.css)$/, loaders: ['style', 'css'] },
+      { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'file' },
+      { test: /\.(woff|woff2)$/, loader: 'url?prefix=font/&limit=5000' },
+      { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=application/octet-stream' },
+      { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=image/svg+xml' },
+      { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url-loader?limit=10000&mimetype=application/font-woff' },
+      { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'file-loader' },
+      {
+        test: /\.(jpg|png|svg)$/,
+        loader: 'url-loader',
+        options: {
+          limit: 25000,
+        }
+      }
     ]
+  },
+  node: {
+    dns: 'mock',
+    net: 'mock'
   }
 };
+
