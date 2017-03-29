@@ -8,80 +8,84 @@ const expires = moment().add(1, 'days').valueOf();
 
 
 const UserController = {
-  createNewUser(req, res) {
-    const firstName = req.body.fName;
-    const lastName = req.body.lName;
-    const email = req.body.email;
-    const userName = req.body.username;
-    const password = req.body.password;
+  createNewUser(request, response) {
+    const firstName = request.body.firstName;
+    const lastName = request.body.lastName;
+    const email = request.body.email;
+    const userName = request.body.userName;
+    const password = request.body.password;
     if (!firstName || !lastName || !email || !userName || !password) {
-      return res.status(400).send({
+      return response.status(400).send({
         message: 'The paramaters are incomplete',
       });
     }
     db.users.findOne({ where: { $or: { email, userName } } })
       .then((userExists) => {
         if (userExists) {
-          return res.status(400).send({
+          return response.status(409).send({
             message: `There is a user already existing
-            with this email or username`
+            with this email or userName`
           });
         }
         return db.users
-          .create(req.body)
+          .create(request.body)
           .then((user) => {
             const payload = {
               userId: user.id,
               roleId: user.roleId
             };
             const token = jwt.sign(payload, secret, { expiresIn: expires });
-            return res.status(201).send({
+            return response.status(201).send({
               message: 'User was successfully created',
               token,
               data: user
             });
           })
           .catch((err) => {
-            res.status(400).send({
+            response.status(400).send({
               message: 'There was a problem creating this user', err
             });
           });
       });
   },
 
-  loginUser(req, res) {
+  loginUser(request, response) {
     db.users
       .findOne({
         where: {
-          email: req.body.email
+          email: request.body.email
         }
       })
       .then((user) => {
         if (!user) {
-          return res.status(403).send({
+          return response.status(406).send({
             message: 'User was not found'
           });
         }
-        if (!user.validatePassword(req.body.password)) {
-          return res.status(401).send({
+        if (!user.validatePassword(request.body.password)) {
+          return response.status(401).send({
             message: 'Invalid password',
           });
         }
-        if (user && user.validatePassword(req.body.password)) {
+        if (user && user.validatePassword(request.body.password)) {
           const payload = {
             userId: user.id,
             roleId: user.roleId
           };
           const token = jwt.sign(payload, secret, { expiresIn: expires });
-          return res.status(200).send({
-            message: 'You were successfully logged in',
+          response.status(200).send({
+            message: 'You are successfully logged in',
             token,
             expiresIn: expires
+          });
+        } else {
+          response.status(401).send({
+            message: 'Invalid login credentials',
           });
         }
       })
       .catch((err) => {
-        res.status(401).send({
+        response.status(401).send({
           message:
           'There was a problem while logging in due to invalid credentials',
           err
@@ -89,14 +93,14 @@ const UserController = {
       });
   },
 
-  findUserById(req, res) {
+  findUserById(request, response) {
     const userDetails = {
-      user: ['id', 'firstName', 'lastName', 'email', 'username'],
+      user: ['id', 'firstName', 'lastName', 'email', 'userName'],
       role: ['id', 'title']
     };
     const query = {
       where: {
-        id: req.params.id
+        id: request.params.id
       },
       attributes: userDetails.user,
       include: [
@@ -109,20 +113,26 @@ const UserController = {
     db.users
       .findOne(query)
       .then((user) => {
+        if (!user) {
+          return response.status(404).send({
+            message: 'The user was not found'
+          });
+        }
         if (user) {
-          return res.status(200).send({ message: 'User found!', data: user });
+          user.password = null;
+          return response.status(200).send({ message: 'User found!', data: user });
         }
       })
       .catch((err) => {
-        res.status(404).send({
-          message: `User ${req.params.id} was not found`, err
+        response.status(404).send({
+          message: 'User was not found', err
         });
       });
   },
 
-  listAllUsers(req, res) {
+  listAllUsers(request, response) {
     const userDetails = {
-      user: ['id', 'firstName', 'lastName', 'email', 'username'],
+      user: ['id', 'firstName', 'lastName', 'email', 'userName'],
       role: ['id', 'title']
     };
     const query = {
@@ -134,47 +144,51 @@ const UserController = {
         }
       ]
     };
+    query.attributes = userDetails.user;
+    query.limit = request.query.limit || null;
+    query.offset = request.query.offset || null;
+    query.order = [['createdAt', 'DESC']];
     db.users
-      .findAll(query)
+        .findAll({ query: query, limit: query.limit, offset: query.offset })
       .then((allUsers) => {
         if (allUsers) {
-          res.status(200).send({
+          response.status(200).send({
             message: 'Listing available users',
             data: allUsers
           });
         }
       })
       .catch((err) => {
-        res.status(404).send({
+        response.status(404).send({
           message: 'There was a problem getting all users',
           err
         });
       });
   },
 
-  updateUser(req, res) {
+  updateUser(request, response) {
     db.users
-      .findById(req.params.id)
+      .findById(request.params.id)
       .then((user) => {
         if (user) {
-          if (toString(req.decodedToken.userId) !== toString(req.params.id)) {
-            return res.send({ message: 'Request not allowed' });
+          if (String(request.decodedToken.userId) !== String(request.params.id)) {
+            return response.send({ message: 'Request not allowed' });
           }
           user.update({
-            firstName: req.body.firstName || user.firstName,
-            lastName: req.body.lastName || user.lastName,
-            email: req.body.email || user.email,
-            userName: req.body.userName || user.userName,
-            password: req.body.password || user.password
+            firstName: request.body.firstName || user.firstName,
+            lastName: request.body.lastName || user.lastName,
+            email: request.body.email || user.email,
+            userName: request.body.userName || user.userName,
+            password: request.body.password || user.password
           })
           .then((updatedProfile) => {
-            res.status(200).send({
+            response.status(200).send({
               message: 'User information updated successfully',
               data: updatedProfile
             });
           });
         } else {
-          res.status(404).send({
+          response.status(404).send({
             message:
               'Cannot update the information of a user that does not exist'
           });
@@ -182,51 +196,76 @@ const UserController = {
       });
   },
 
-  deleteUser(req, res) {
+  deleteUser(request, response) {
     db.users
-      .findById(req.params.id)
+      .findById(request.params.id)
       .then((user) => {
         if (user) {
-          if (toString(req.decodedToken.userId) !== toString(req.params.id)) {
-            return res.send({ message: 'Request not allowed' });
-          }
           user.destroy()
           .then(() => {
-            res.status(200).send({
+            response.status(200).send({
               message: 'User was deleted successfully'
             });
           });
         } else {
-          res.status(404).send({
+          response.status(404).send({
             message: 'Cannot delete a user that does not exist'
           });
         }
       });
   },
 
-  listUserDocuments(req, res) {
+  listUserDocuments(request, response) {
     const userDetails = {
-      user: ['id', 'firstName', 'lastName', 'email', 'username'],
+      user: ['id', 'firstName', 'lastName', 'email', 'userName'],
       doc: ['id', 'title', 'content']
     };
     db.users
       .findAll({
-        where: { id: req.params.id },
+        where: { id: request.params.id },
         include: [{ model: db.documents, attributes: userDetails.doc }]
       })
       .then((user) => {
         if (!user) {
-          return res.status(404).send({
+          return response.status(404).send({
             message:
                 'Cannot get the documents of a user that does not exist'
           });
         }
-        res.status(200).send({ message: user });
+        response.status(200).send({ message: 'Documents Found', data: user[0].documents });
       });
   },
 
-  logoutUser(req, res) {
-    res.status(200).send({
+  searchUser(request, response) {
+    db.users
+      .findAll({
+        where: {
+          userName: { $iLike: `%${request.query.q}%` }
+        }
+      })
+      .then((user) => {
+        if (!user) {
+          return response.status(404).send({
+            message: 'The user was not found'
+          });
+        }
+        if (user) {
+          return response.status(200).send({
+            message: 'User found!',
+            data: [user[0].firstName, user[0].lastName, user[0].userName]
+          });
+        }
+      })
+      .catch((err) => {
+        response.status(404).send({
+          message: 'There was a problem getting user',
+          err
+        });
+      });
+  },
+
+  logoutUser(request, response) {
+    response.status(200).send({
       message: 'You were logged out successfully'
     });
   }

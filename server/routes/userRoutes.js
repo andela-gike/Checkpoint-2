@@ -1,12 +1,11 @@
 import express from 'express';
-import UserController from '../controllers/UserController';
+import UserController from '../controllers/userController';
 import Authentication from '../middleware/authentication';
 
 const userRouter = express.Router();
 
 userRouter.route('/')
-  .get(Authentication.verifyUser,
-  Authentication.verifyAdmin, UserController.listAllUsers)
+  .get(Authentication.verifyUser, UserController.listAllUsers)
   .post(UserController.createNewUser);
 
 userRouter.route('/login')

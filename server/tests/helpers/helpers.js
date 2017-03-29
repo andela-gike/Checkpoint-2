@@ -9,6 +9,6 @@ export default {
   legitUsers: user.legitUsers,
   invalidUsers: user.invalidUsers,
 
-  legitDocs: doc.legitDocs,
+  goodDocs: doc.goodDocs,
   invalidDocs: doc.invalidDocs
 };

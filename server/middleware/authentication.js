@@ -7,30 +7,30 @@ dotenv.config({ silent: true });
 const secret = process.env.SECRET || 'Happypeopledontkeepsecret';
 
 const Authentication = {
-  verifyUser(req, res, next) {
-    const token = req.body.token || req.query.token ||
-      req.headers.authorization || req.headers['x-access-token'];
+  verifyUser(request, response, next) {
+    const token = request.body.token || request.query.token ||
+      request.headers.authorization || request.headers['x-access-token'];
     if (!token) {
-      return res.status(401).send({ message: 'Verification failed' });
+      return response.status(401).send({ message: 'Verification failed' });
     }
     jwt.verify(token, secret, (err, decoded) => {
       if (err) {
-        res.status(401).send({ message: 'Invalid token' });
+        response.status(401).send({ message: 'Invalid token' });
       } else {
-        req.decodedToken = decoded;
+        request.decodedToken = decoded;
         next();
       }
     });
   },
 
-  verifyAdmin(req, res, next) {
+  verifyAdmin(request, response, next) {
     db.roles
-      .findById(req.decodedToken.roleId)
+      .findById(request.decodedToken.roleId)
       .then((role) => {
         if (role.title === 'admin' || role.id === 1) {
           next();
         } else {
-          return res.status(403).send({
+          return response.status(403).send({
             message:
             'Permission denied, admin only'
           });
@@ -38,18 +38,18 @@ const Authentication = {
       });
   },
 
-  logout(req, res, next) {
-    const token = req.headers.token || req.headers.authorization ||
-      req.headers['x-access-token'];
+  logout(request, response, next) {
+    const token = request.headers.token || request.headers.authorization ||
+      request.headers['x-access-token'];
     if (!token) {
-      return res.status(401).send({ message: 'You must be logged in' });
+      return response.status(401).send({ message: 'You must be logged in' });
     }
-    const decoded = req.decodedToken;
+    const decoded = request.decodedToken;
     if (token && decoded) {
-      delete req.headers.token;
-      delete req.headers.authorization;
-      delete req.headers['x-access-token'];
-      delete req.decodedToken;
+      delete request.headers.token;
+      delete request.headers.authorization;
+      delete request.headers['x-access-token'];
+      delete request.decodedToken;
       next();
     }
   }

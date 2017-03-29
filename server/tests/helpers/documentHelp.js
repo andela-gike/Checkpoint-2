@@ -1,6 +1,6 @@
 import faker from 'faker';
 
-const legitDocs = [
+const goodDocs = [
   {
     title: faker.company.catchPhrase(),
     content: faker.lorem.paragraphs,
@@ -79,6 +79,6 @@ const invalidDocs = [
 ];
 
 export {
-  legitDocs,
+  goodDocs,
   invalidDocs
 };
