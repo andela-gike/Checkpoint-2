@@ -4,4 +4,12 @@ language: node_js
 
 node_js: "6"
 
-
+before_install:
+  - psql -c 'drop database if exists docman-dev;' -U postgres
+  - psql -c 'create database docman-dev;' -U postgres
+services:
+  - postgresql
+script:
+  - npm test
+addons:
+  postgresql: "9.3"
