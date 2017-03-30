@@ -5,7 +5,7 @@ class Login extends React.Component {
     return (
       <div className="row">
         <div className="col s12 m8 l4 offset-m2 offset-l4 z-depth-4 card-panel login-form">
-          <form className="col s12" onSubmit={this.handleSubmit}>
+          <form className="col s12">
             <div className="row">
               <div className="input-field col s12">
                 <h4 className="center login-form-text">Sign into your account</h4>
@@ -17,12 +17,9 @@ class Login extends React.Component {
                 <input
                   id="username"
                   type="text"
-                  value={this.state.userInfo.username}
-                  onChange={event => this.handleInputChange(event, 'username')}
                 />
                 <label htmlFor="username" className="left-align">username</label>
               </div>
-              { this.displayValidationErrors('username') }
             </div>
             <div className="row margin">
               <div className="input-field col s12">
@@ -30,17 +27,13 @@ class Login extends React.Component {
                 <input
                   id="password"
                   type="password"
-                  value={this.state.userInfo.password}
-                  onChange={event => this.handleInputChange(event, 'password')}
                 />
                 <label htmlFor="password" className="left-align">Password</label>
               </div>
-              { this.displayValidationErrors('password') }
             </div>
-            { this.displayAsyncFeedback() }
             <div className="row">
               <div className="input-field col s12 signup-btn">
-                <button className={`btn waves-effect waves-light col s12 ${this.isFormValid() ? '' : 'disabled'}`}>
+                <button className={'btn waves-effect waves-light col s12 '}>
                   Login
                 </button>
               </div>

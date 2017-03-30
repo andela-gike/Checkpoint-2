@@ -14,7 +14,6 @@ export default (
       <Route path="about" component={AboutPage} />
       <Route path="login" component={LoginPage} />
       <Route path="signup" component={SignUpPage} />
-      <Route />
     </Route>
 );
 
