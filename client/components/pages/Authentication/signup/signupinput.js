@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import classname from 'classnames';
+import { browserHistory } from 'react-router';
 import signupValidators from '../../../../../server/validation/signupvalidator';
 
 class Signupinput extends React.Component {
@@ -42,7 +43,9 @@ class Signupinput extends React.Component {
     if (this.isValid()) {
       this.setState({ errors: {}, isLoading: true });
       this.props.userSignupRequest(this.state).then(
-      () => {},
+      () => {
+        this.context.router.push('/');
+      },
       ({ data }) => this.setState({ errors: data, isLoading: false })
     );
       console.log(this.state);
@@ -180,9 +183,9 @@ Signupinput.propTypes = {
   userSignupRequest: React.PropTypes.func.isRequired
 };
 
-// Signupinput.contextTypes = {
-//   router: React.PropTypes.object.isRequired
-// };
+Signupinput.contextTypes = {
+  router: React.PropTypes.object.isRequired
+};
 
 export default Signupinput;
 
