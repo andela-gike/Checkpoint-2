@@ -44,6 +44,10 @@ class Signupinput extends React.Component {
       this.setState({ errors: {}, isLoading: true });
       this.props.userSignupRequest(this.state).then(
       () => {
+        this.props.addFlashMessage({
+          type: 'success',
+          text: 'You have successfully signed up. Welcome!'
+        });
         this.context.router.push('/');
       },
       ({ data }) => this.setState({ errors: data, isLoading: false })
@@ -180,7 +184,8 @@ class Signupinput extends React.Component {
 
 
 Signupinput.propTypes = {
-  userSignupRequest: React.PropTypes.func.isRequired
+  userSignupRequest: React.PropTypes.func.isRequired,
+  addFlashMessage: React.PropTypes.func.isRequired
 };
 
 Signupinput.contextTypes = {
