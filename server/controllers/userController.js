@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import moment from 'moment';
 import db from '../models';
+import validInput from '../validation/signupvalidator';
 
 dotenv.config({ silent: true });
 
@@ -17,6 +18,11 @@ const UserController = {
           return res.status(400).send({
             message: 'There is a user already existing with this email'
           });
+        }
+        const { errors, isValid } = validInput(req.body);
+
+        if (!isValid) {
+          res.status(400).json(errors);
         }
         db.users
           .create(req.body)
