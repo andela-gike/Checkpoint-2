@@ -16,11 +16,13 @@ class Signupinput extends React.Component {
       confirmPass: '',
       roleId: 2,
       errors: {},
-      isLoading: false
+      isLoading: false,
+      invalid: false
     };
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.checkUserExists = this.checkUserExists.bind(this);
   }
 
   onChange(e) {
@@ -36,6 +38,25 @@ class Signupinput extends React.Component {
 
     return isValid;
   }
+
+    checkUserExists(e) {
+    const field = e.target.name;
+    const val = e.target.value;
+    if (val !== '') {
+      this.props.isUserExists(val).then((res) => {
+        const errors = this.state.errors;
+        let invalid;
+        if (res.data.user) {
+          errors[field] = `A user already exists with that ${field}`;
+          invalid = true;
+        } else {
+          errors[field] = '';
+          invalid = false;
+        }
+        this.setState({ errors, invalid });
+      });
+    }
+    }
 
   onSubmit(e) {
     e.preventDefault();
@@ -111,6 +132,7 @@ class Signupinput extends React.Component {
                   type="text"
                   value={this.state.email}
                   onChange={this.onChange}
+                  onBlur={this.checkUserExists}
                 />
                 <label htmlFor="email" className="left-align">email</label>
                 {errors.email && <span className="help-block">{errors.email}</span>}
@@ -125,6 +147,7 @@ class Signupinput extends React.Component {
                   type="text"
                   value={this.state.userName}
                   onChange={this.onChange}
+                  onBlur={this.checkUserExists}
                 />
                 <label htmlFor="userName" className="left-align">userName</label>
               </div>
@@ -164,7 +187,9 @@ class Signupinput extends React.Component {
             </div>
             <div className="row">
               <div className="input-field col s12 signup-btn">
-                <button className={'btn waves-effect waves-light col s12'} disabled={this.state.isLoading}>
+                <button
+                  className={'btn waves-effect waves-light col s12'}
+                  disabled={this.state.isLoading || this.state.invalid}>
                   Signup
                 </button>
               </div>
@@ -185,7 +210,8 @@ class Signupinput extends React.Component {
 
 Signupinput.propTypes = {
   userSignupRequest: React.PropTypes.func.isRequired,
-  addFlashMessage: React.PropTypes.func.isRequired
+  addFlashMessage: React.PropTypes.func.isRequired,
+  isUserExists: React.PropTypes.func.isRequired
 };
 
 Signupinput.contextTypes = {

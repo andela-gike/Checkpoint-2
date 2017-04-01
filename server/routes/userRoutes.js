@@ -9,6 +9,9 @@ userRouter.route('/')
   Authentication.verifyAdmin, UserController.listAllUsers)
   .post(UserController.createNewUser);
 
+userRouter.route('/user/findUser/:identifier')
+    .get(UserController.fetchExistingUser);
+
 userRouter.route('/login')
   .post(UserController.loginUser);
 
