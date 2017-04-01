@@ -74,10 +74,6 @@ class Signupinput extends React.Component {
       ({ data }) => this.setState({ errors: data, isLoading: false })
     );
       console.log(this.state);
-
-    // if (this.isValid()) {
-    //   this.setState({ errors: {}, isLoading: true });
-    // }
     }
   }
 
