@@ -40,6 +40,7 @@
     "supertest": "^3.0.0"
   },
   "devDependencies": {
+    "babel-istanbul": "^0.12.2",
     "eslint": "^3.16.1",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^3.0.2",
@@ -50,10 +51,9 @@
   },
   "scripts": {
     "start:dev": "nodemon ./server --exec babel-node --presets es2015,react,airbnb,stage-2",
-    "test": "NODE_ENV=test && sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all && node_modules/.bin/babel-node node_modules/.bin/_mocha --timeout 15000 ./server/tests/**/*.spec.js --recursive",
+    "test": "NODE_ENV=test && sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all && node_modules/.bin/babel-node ./node_modules/babel-istanbul/lib/cli.js cover node_modules/.bin/_mocha --timeout 15000 ./server/tests/**/*.spec.js --recursive",
     "test_db_migrate": "sequelize db:migrate",
     "coveralls": "npm run test -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
-
   },
   "repository": "git+https://github.com/andela-gike/Checkpoint-2.git",
   "keywords": [
