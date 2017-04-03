@@ -50,7 +50,7 @@
   },
   "scripts": {
     "start:dev": "nodemon ./server --exec babel-node --presets es2015,react,airbnb,stage-2",
-    "test": "NODE_ENV=test && sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all && node_modules/.bin/babel-node node_modules/.bin/babel-istanbul cover node_modules/.bin/_mocha ./server/tests/controllers/*.spec.js --recursive",
+    "test": "NODE_ENV=test && sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all && node_modules/.bin/babel-node node_modules/.bin/_mocha --timeout 15000 ./server/tests/**/*.spec.js --recursive",
     "test_db_migrate": "sequelize db:migrate",
     "coveralls": "npm run test -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
 

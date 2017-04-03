@@ -2,8 +2,14 @@ import faker from 'faker';
 
 const goodDocs = [
   {
-    title: faker.company.catchPhrase(),
-    content: faker.lorem.paragraphs,
+    title: 'Inverse optimal website',
+    content: `Dignissimos debitis reiciendis ea illo quia.
+    Dicta fugiat quasi id consequuntur officiis sequi similique.
+    Voluptatum voluptatem et. Necessitatibus maiores quidem molestias.
+    Tempore omnis ipsam et. Tempora maxime laboriosam expedita est aperiam
+    quibusdam error itaque assumenda. Natus aut est provident non voluptatem
+    ducimus. Qui commodi minus est eligendi enim iure iusto dolore.
+    Quibusdam officiiscupiditate praesentium omnis cum.`,
     access: 'public',
     userId: 1,
     userRoleId: 1,

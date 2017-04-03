@@ -1,16 +1,29 @@
 module.exports = (sequelize, DataTypes) => {
   const documents = sequelize.define('documents', {
     userId: {
-      type: DataTypes.STRING,
-      allowNull: false
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      validate: {
+        isInt: { msg: 'user ID must be an integer' }
+      }
     },
     title: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: 'You must provide a Title'
+        }
+      }
     },
     content: {
       type: DataTypes.TEXT,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: 'You cannot have an empty Document'
+        }
+      }
     },
     access: {
       type: DataTypes.STRING,
@@ -31,7 +44,8 @@ module.exports = (sequelize, DataTypes) => {
           foreignKey: 'userId'
         });
       }
-    }
+    },
+    freezeTableName: true
   });
   return documents;
 };

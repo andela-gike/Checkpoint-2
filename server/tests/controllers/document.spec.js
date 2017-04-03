@@ -2,17 +2,16 @@ import chai from 'chai';
 import supertest from 'supertest';
 import app from '../../routes/index';
 import helpers from '../helpers/helpers';
+import models from '../../models';
 
 const request = supertest.agent(app);
 const should = chai.should();
 const docs = helpers.goodDocs;
 const users = helpers.legitUsers;
-const expect = chai.expect;
 
 
 let adminUserToken;
 let regularUserToken;
-let document;
 
 describe('Document API Spec', () => {
   before((done) => {
@@ -34,8 +33,9 @@ describe('Document API Spec', () => {
         done();
       });
   });
+  after(() => models.sequelize.sync({ force: false }));
 
-  describe('Create Documents', () => {
+  describe('Create Documents by making POST request', () => {
     it('should allow a user to create a document', (done) => {
       request.post('/api/documents')
         .set('authorization', regularUserToken)
@@ -44,7 +44,9 @@ describe('Document API Spec', () => {
           content: docs[0].content })
         .expect(201)
         .end((err, response) => {
+          response.body.should.be.an('object');
           response.body.message.should.equal('Document created successfully');
+          response.body.data.should.have.property('createdAt');
           done();
         });
     });
@@ -53,6 +55,7 @@ describe('Document API Spec', () => {
         .send(docs[0])
         .expect(401)
         .end((err, response) => {
+          response.body.should.be.an('object');
           response.body.message.should.equal('Verification failed');
           done();
         });
@@ -67,6 +70,7 @@ describe('Document API Spec', () => {
         })
         .expect(400)
         .end((err, response) => {
+          response.body.should.be.an('object');
           response.body.message.should
           .equal('The title or the content of the document is empty');
           done();
@@ -81,6 +85,7 @@ describe('Document API Spec', () => {
         })
         .expect(400)
         .end((err, response) => {
+          response.body.should.be.an('object');
           response.body.message.should
           .equal('The title or the content of the document is empty');
           done();
@@ -95,6 +100,7 @@ describe('Document API Spec', () => {
         })
         .expect(400)
         .end((err, response) => {
+          response.body.should.be.an('object');
           response.body.message.should
           .equal('The title or the content of the document is empty');
           done();
@@ -102,7 +108,7 @@ describe('Document API Spec', () => {
     });
   });
 
-  describe('Update Documents', () => {
+  describe('making a PUT request to update a document details/content', () => {
     it('Should notify the user if the document was not found', (done) => {
       request.put('/api/documents/6753')
         .set('authorization', regularUserToken)
@@ -112,6 +118,7 @@ describe('Document API Spec', () => {
         })
         .expect(404)
         .end((err, response) => {
+          response.body.should.be.an('object');
           response.body.message.should
             .equal('Cannot update a document that does not exist');
           done();
@@ -126,7 +133,9 @@ describe('Document API Spec', () => {
         })
         .expect(200)
         .end((err, response) => {
-          response.body.message.should.equal('The document was updated successfully');
+          response.body.should.be.an('object');
+          response.body.message.should
+          .equal('The document was updated successfully');
           should.exist(response.body.data);
           done();
         });
@@ -140,18 +149,20 @@ describe('Document API Spec', () => {
         })
         .expect(404)
         .end((err, response) => {
+          response.body.should.be.an('object');
           response.body.message.should.equal('No update detected');
           done();
         });
     });
   });
 
-  describe('Delete Documents', () => {
+  describe('making a DELETE request to  Documents', () => {
     it('should fail if the document wasn\'t found', (done) => {
       request.delete('/api/documents/6753')
         .set('authorization', regularUserToken)
         .expect(404)
         .end((err, response) => {
+          response.body.should.be.an('object');
           response.body.message.should
             .equal('Cannot delete a document that does not exist');
           done();
@@ -162,6 +173,7 @@ describe('Document API Spec', () => {
         .set('authorization', regularUserToken)
         .expect(200)
         .end((err, response) => {
+          response.body.should.be.an('object');
           response.body.message.should.equal('The document was deleted successfully');
           done();
         });
@@ -170,6 +182,7 @@ describe('Document API Spec', () => {
       request.delete('/api/documents/5')
       .expect(401)
         .end((err, response) => {
+          response.body.should.be.an('object');
           response.body.message.should.equal('Verification failed');
           done();
         });
@@ -182,6 +195,7 @@ describe('Document API Spec', () => {
         .set('authorization', regularUserToken)
         .expect(200)
         .end((err, response) => {
+          response.body.should.be.an('object');
           response.body.message.should.equal('Showing all public documents');
           done();
         });
@@ -191,7 +205,18 @@ describe('Document API Spec', () => {
         .set('authorization', adminUserToken)
         .expect(200)
         .end((err, response) => {
+          response.body.should.be.an('object');
           response.body.message.should.equal('Showing all available documents');
+          done();
+        });
+    });
+    it('Should return documents starting from the most recent', (done) => {
+      request.get('/api/documents')
+        .set('authorization', adminUserToken)
+        .expect(200)
+        .end((err, response) => {
+          if (err) return done(err);
+          response.body.data['id'].should.not.equal(1);
           done();
         });
     });
@@ -200,6 +225,7 @@ describe('Document API Spec', () => {
         .set('authorization', regularUserToken)
         .expect(200)
         .end((err, response) => {
+          response.body.should.be.an('object');
           response.body.message.should.equal('Document found!');
           done();
         });
@@ -209,6 +235,7 @@ describe('Document API Spec', () => {
         .set('authorization', regularUserToken)
         .expect(401)
         .end((err, response) => {
+          response.body.should.be.an('object');
           response.body.message.should.equal('Permission denied');
           done();
         });
@@ -218,6 +245,7 @@ describe('Document API Spec', () => {
         .set('authorization', regularUserToken)
         .expect(200)
         .end((err, response) => {
+          response.body.should.be.an('object');
           response.body.message.should.equal('Document found!');
           done();
         });
@@ -227,6 +255,7 @@ describe('Document API Spec', () => {
         .set('authorization', regularUserToken)
         .expect(404)
         .end((err, response) => {
+          response.body.should.be.an('object');
           response.body.message.should
             .equal('Document with the id: 3432 does not exist');
           done();
@@ -240,6 +269,7 @@ describe('Document API Spec', () => {
         .set('authorization', regularUserToken)
         .expect(200)
         .end((err, response) => {
+          response.body.should.be.an('object');
           response.body.message.should.equal('Search results from public documents');
           done();
         });
@@ -249,6 +279,7 @@ describe('Document API Spec', () => {
         .set('authorization', adminUserToken)
         .expect(200)
         .end((err, response) => {
+          response.body.should.be.an('object');
           response.body.message.should.equal('Search results from all documents');
           done();
         });
@@ -257,6 +288,7 @@ describe('Document API Spec', () => {
       request.get('/api/search/documents/?q')
         .set('authorization', regularUserToken)
         .end((err, response) => {
+          response.body.should.be.an('object');
           response.body.message.equal('Search cannot be empty');
           done();
         });
