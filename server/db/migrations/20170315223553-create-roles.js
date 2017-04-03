@@ -1,7 +1,6 @@
-
 module.exports = {
-  up: (queryInterface, Sequelize) =>
-    queryInterface.createTable('Roles', {
+  up(queryInterface, Sequelize) {
+    return queryInterface.createTable('roles', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -18,10 +17,8 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
-      },
-
-    }),
-  down: (queryInterface, Sequelize) => {
-    queryInterface.dropTable('Roles');
-  }
+      }
+    });
+  },
+  down: (queryInterface, Sequelize) => queryInterface.dropTable('roles')
 };

@@ -1,12 +1,16 @@
 
+
 module.exports = {
-  up: (queryInterface, Sequelize) =>
-    queryInterface.createTable('documents', {
+  up(queryInterface, Sequelize) {
+    return queryInterface.createTable('documents', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
+      },
+      userId: {
+        type: Sequelize.STRING
       },
       title: {
         type: Sequelize.STRING
@@ -14,18 +18,11 @@ module.exports = {
       content: {
         type: Sequelize.TEXT
       },
-      ownerId: {
-        type: Sequelize.INTEGER
-      },
-      typeId: {
-        type: Sequelize.INTEGER
-      },
       access: {
-        defaultValue: 'public',
-        type: Sequelize.STRING,
-        validate: {
-          isIn: [['private', 'public', 'role']]
-        },
+        type: Sequelize.STRING
+      },
+      userRoleId: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -34,8 +31,8 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
-      },
-    }),
-  down: (queryInterface, Sequelize) =>
-    queryInterface.dropTable('documents'),
+      }
+    });
+  },
+  down: (queryInterface, Sequelize) => queryInterface.dropTable('documents')
 };

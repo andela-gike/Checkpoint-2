@@ -1,67 +1,74 @@
-import bcrypt from 'bcrypt-nodejs';
+import Bcrypt from 'bcrypt-nodejs';
+
+const salt = Bcrypt.genSaltSync(10);
 
 module.exports = (sequelize, DataTypes) => {
-  const Users = sequelize.define('Users', {
-    userName: {
-      unique: true,
-      type: DataTypes.STRING
-    },
+  const users = sequelize.define('users', {
     firstName: {
-      allowNull: false,
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: false
     },
     lastName: {
-      allowNull: false,
-      type: DataTypes.STRING
-    },
-    password: {
-      allowNull: false,
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: false
     },
     email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
+    },
+    userName: {
+      type: DataTypes.STRING,
       allowNull: false,
       unique: true,
-      type: DataTypes.STRING,
       validate: {
-        isEmail: true
+        len: {
+          args: 3,
+          message: 'Your username should be atleast 3 characters long'
+        }
       }
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        len: {
+          args: [6, 200],
+          message: 'Your password must be atleast 6 characters long'
+        }
+      }
+    },
+    roleId: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 2
     }
   }, {
     classMethods: {
       associate: (models) => {
-        // associations can be defined here
-        Users.belongsTo(models.Roles, {
-          as: 'role',
-          foreignKeys: {
-            allowNull: false,
-          },
+        users.hasMany(models.documents, { foreignKey: 'userId' });
+        users.belongsTo(models.roles, {
+          foreignKey: 'roleId',
+          onDelete: 'CASCADE'
         });
-
-        Users.hasMany(models.document);
-      },
-    },
-
-    instanceMethods: {
-      /**
-       * Compare plain password to user's hashed password
-       * @method
-       * @param {String} password
-       * @returns {Boolean} password match
-       */
-      authenicatePassword(password) {
-        return bcrypt.compareSync(password, this.password);
-      },
-
-      /**
-       * Hash user's password
-       * @method
-       * @returns {Void} no return
-       */
-      hashPassword() {
-        this.password = bcrypt.hashSync(this.password, bcrypt.genSaltSync(10));
       }
     },
+    instanceMethods: {
+      generateHashedPassword() {
+        this.password = Bcrypt.hashSync(this.password, salt);
+      },
+      validatePassword(password) {
+        return Bcrypt.compareSync(password, this.password);
+      }
+    },
+    hooks: {
+      beforeCreate(user) {
+        user.generateHashedPassword();
+      },
+      beforeUpdate(user) {
+        user.generateHashedPassword();
+      }
+    }
   });
-  sequelize.sync();
-  return Users;
+  return users;
 };

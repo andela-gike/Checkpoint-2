@@ -1,6 +1,9 @@
-
 module.exports = (sequelize, DataTypes) => {
   const documents = sequelize.define('documents', {
+    userId: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     title: {
       type: DataTypes.STRING,
       allowNull: false
@@ -9,32 +12,23 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull: false
     },
-    ownerId: DataTypes.INTEGER,
-    typeId: DataTypes.INTEGER,
     access: {
-      defaultValue: 'public',
       type: DataTypes.STRING,
+      defaultValue: 'public',
       validate: {
-        isIn: [['private', 'public', 'role']]
-      }
+        isIn: [['public', 'private', 'role']]
+      },
+      allowNull: false
     },
+    userRoleId: {
+      type: DataTypes.STRING
+    }
   }, {
     classMethods: {
       associate: (models) => {
-        // associations can be defined here
-        documents.belongsTo(models.User, {
-          as: 'user',
-          onDelete: 'CASACADE',
-          foreignKey: {
-            allowNull: false,
-          },
-        });
-
-        documents.belongsTo(models.Role, {
-          as: 'role',
-          foreignKey: {
-            allowNull: false,
-          },
+        documents.belongsTo(models.users, {
+          onDelete: 'CASCADE',
+          foreignKey: 'userId'
         });
       }
     }
