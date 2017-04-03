@@ -45,7 +45,7 @@ class Signupinput extends React.Component {
       this.props.isUserExists(val).then((res) => {
         const errors = this.state.errors;
         let invalid;
-        if (res.data.user) {
+        if (res.data.userData) {
           errors[field] = `A user already exists with that ${field}`;
           invalid = true;
         } else {

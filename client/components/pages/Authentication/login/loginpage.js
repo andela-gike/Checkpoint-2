@@ -1,12 +1,12 @@
 import React from 'react';
-import loginInput from '../login/logininput';
+import LoginInput from './logininput';
 
 class LoginPage extends React.Component {
   render() {
     return (
-      <div>
-        <div>
-          <loginInput />
+      <div className="row">
+        <div className=" col s12">
+          <LoginInput />
         </div>
       </div>
     );
