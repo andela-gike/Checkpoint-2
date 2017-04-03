@@ -68,9 +68,9 @@ class Signupinput extends React.Component {
             type: 'success',
             text: 'You have successfully signed up. Welcome!'
           });
-          this.context.router.push('/');
+          this.context.router.push('/login');
         },
-        ({ data }) => this.setState({ errors: data, isLoading: false })
+        (err) => this.setState({ errors: err.response.data, isLoading: false })
       );
       console.log(this.state);
     }

@@ -47,8 +47,7 @@ class LoginInput extends React.Component {
     return (
       <div className="row">
         <div className="col s12 m8 l4 offset-m2 offset-l4 z-depth-4 card-panel login-form">
-          <form className="col s12 center-align" id="loginform" onSubmit={this.onSubmit}>
-            {errors.form && <div className="card-alert">{errors.form}</div>}
+          <form className="col s12" onSubmit={this.onSubmit}>
             <div className="row">
               <div className="input-field col s12">
                 <h4 className="center login-form-text">Sign into your account</h4>
