@@ -59,7 +59,7 @@ class LoginInput extends React.Component {
                 <input
                   className="validate"
                   id="email"
-                  type="text"
+                  type="email"
                   value={this.state.email}
                   onChange={this.onChange}
                 />
