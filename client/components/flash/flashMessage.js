@@ -15,16 +15,17 @@ class FlashMessage extends React.Component {
   render() {
     const { type, text } = this.props.message;
     return (
-         <div className="row">
-        <div className="col s12 l12">
+      <div className="row" >
+        <div className="col s12 l4 m4">
           <div id="card-alert" className={classnames('card', {
             green: type === 'success',
             red: type === 'error'
           })}>
             <div className="card-content white-text">
-              <button type="button" id="dismissSignup"
+              <button
+                type="button" id="dismissSignup" aria-label="Close"
                 onClick={this.onClick} className="close right">
-                <span>&times;</span>
+                <span aria-hidden="true">x</span>
               </button>
               <p>{text}</p>
             </div>

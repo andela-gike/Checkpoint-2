@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import classname from 'classnames';
-import { browserHistory } from 'react-router';
 import signupValidators from '../../../../../server/validation/signupvalidator';
 
 class Signupinput extends React.Component {
@@ -29,7 +28,7 @@ class Signupinput extends React.Component {
     this.setState({ [e.target.id]: e.target.value });
   }
 
-    isValid() {
+  isValid() {
     const { errors, isValid } = signupValidators(this.state);
 
     if (!isValid) {
@@ -39,7 +38,7 @@ class Signupinput extends React.Component {
     return isValid;
   }
 
-    checkUserExists(e) {
+  checkUserExists(e) {
     const field = e.target.name;
     const val = e.target.value;
     if (val !== '') {
@@ -56,7 +55,7 @@ class Signupinput extends React.Component {
         this.setState({ errors, invalid });
       });
     }
-    }
+  }
 
   onSubmit(e) {
     e.preventDefault();
@@ -64,15 +63,15 @@ class Signupinput extends React.Component {
     if (this.isValid()) {
       this.setState({ errors: {}, isLoading: true });
       this.props.userSignupRequest(this.state).then(
-      () => {
-        this.props.addFlashMessage({
-          type: 'success',
-          text: 'You have successfully signed up. Welcome!'
-        });
-        this.context.router.push('/');
-      },
-      ({ data }) => this.setState({ errors: data, isLoading: false })
-    );
+        () => {
+          this.props.addFlashMessage({
+            type: 'success',
+            text: 'You have successfully signed up. Welcome!'
+          });
+          this.context.router.push('/');
+        },
+        ({ data }) => this.setState({ errors: data, isLoading: false })
+      );
       console.log(this.state);
     }
   }

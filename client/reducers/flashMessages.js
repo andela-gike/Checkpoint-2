@@ -4,7 +4,7 @@ import { ADD_FLASH_MESSAGE, DELETE_FLASH_MESSAGE } from '../actions/actionTypes'
 
 
 export default (state = [], action = {}) => {
-  switch(action.type) {
+  switch (action.type) {
     case ADD_FLASH_MESSAGE:
       return [
         ...state,
@@ -15,7 +15,7 @@ export default (state = [], action = {}) => {
         }
       ];
     case DELETE_FLASH_MESSAGE:
-    const index = findIndex(state, { id: action.id });
+      const index = findIndex(state, { id: action.id });
       if (index >= 0) {
         return [
           ...state.slice(0, index),
@@ -25,4 +25,4 @@ export default (state = [], action = {}) => {
       return state;
     default: return state;
   }
-}
+};

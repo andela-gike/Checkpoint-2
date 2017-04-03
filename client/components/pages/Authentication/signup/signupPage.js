@@ -27,4 +27,4 @@ SignupPage.propTypes = {
   isUserExists: React.PropTypes.func.isRequired
 };
 
-export default connect(null, { userSignupRequest, isUserExists })(SignupPage);
+export default connect(null, { userSignupRequest, addFlashMessage, isUserExists })(SignupPage);
