@@ -2,7 +2,7 @@
 
 import { expect } from 'chai';
 import model from '../../models';
-import helper from '../helpers/modelHelper';
+import helper from './modelHelper';
 
 const Role = model.roles;
 const User = model.users;

@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 
 import { expect } from 'chai';
-import helper from '../helpers/modelHelper';
+import helper from './modelHelper';
 import model from '../../models';
 
 const Role = model.roles;
