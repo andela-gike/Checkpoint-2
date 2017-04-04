@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import webpack from 'webpack';
 import path from 'path';
-import open from 'open';
+// import open from 'open';
 import config from './webpack.config';
 import app from './server/routes/index';
 
@@ -21,10 +21,12 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/index.html'));
 });
 
-app.listen(port, (error) => {
-  if (!error) {
-    open(`http://localhost:${port}`);
-  } else {
-    console.log('error');
-  }
-});
+app.listen(port
+  // , (error) => {
+  //   if (!error) {
+  //     open(`http://localhost:${port}`);
+  //   } else {
+  //     console.log('error');
+  //   }
+  // }
+);
