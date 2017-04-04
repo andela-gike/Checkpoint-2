@@ -11,7 +11,7 @@ const Authentication = {
     const token = request.body.token || request.query.token ||
       request.headers.authorization || request.headers['x-access-token'];
     if (!token) {
-      return response.status(401).send({ message: 'Verification failed' });
+      return response.status(401).send({ message: 'No token was provided' });
     }
     jwt.verify(token, secret, (err, decoded) => {
       if (err) {

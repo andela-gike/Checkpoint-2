@@ -35,8 +35,6 @@ describe('The Document Model Test Suite', () => {
       document = Document.build(fakeDocument);
     });
 
-    afterEach(() => Document.destroy({ where: {} }));
-
     it('should be allow for the creation of a document', (done) => {
       document.save()
         .then((createdDocument) => {

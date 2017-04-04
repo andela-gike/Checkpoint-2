@@ -2,14 +2,12 @@ import faker from 'faker';
 
 const goodDocs = [
   {
-    title: 'Inverse optimal website',
-    content: `Dignissimos debitis reiciendis ea illo quia.
-    Dicta fugiat quasi id consequuntur officiis sequi similique.
-    Voluptatum voluptatem et. Necessitatibus maiores quidem molestias.
-    Tempore omnis ipsam et. Tempora maxime laboriosam expedita est aperiam
-    quibusdam error itaque assumenda. Natus aut est provident non voluptatem
-    ducimus. Qui commodi minus est eligendi enim iure iusto dolore.
-    Quibusdam officiiscupiditate praesentium omnis cum.`,
+    title: 'Digitized impactful Graphic Interface',
+    content: `Cumque dolorum laborum sint id. Error cumque ipsa culpa
+    est delectus dolores consequatur et laudantium.
+    Est enim facilis ad occaecati iusto qui. Et rerum tempora eius et quae eveniet.
+    Ut adipisci ut occaecati id assumenda nihil. Eos repudiandae est sed
+    qui est sapiente temporibus dolorem.`,
     access: 'public',
     userId: 1,
     userRoleId: 1,
@@ -17,8 +15,12 @@ const goodDocs = [
     updatedAt: new Date()
   },
   {
-    title: faker.company.catchPhrase(),
-    content: faker.lorem.paragraphs,
+    title: 'Customer-focused 4th generation policy',
+    content: `Id consectetur omnis repudiandae optio quia expedita
+    quam aut.Magni dolorem necessitatibus.
+     Culpa tenetur officiis velit.Impedit modi exercitationem sed in
+     non voluptate sapiente aperiam. Impedit nesciunt architecto et omnis
+    cum sit eligendi blanditiis.Aut suscipit quos.`,
     access: 'private',
     userId: 2,
     userRoleId: 1,
@@ -26,8 +28,11 @@ const goodDocs = [
     updatedAt: new Date()
   },
   {
-    title: faker.company.catchPhrase(),
-    content: faker.lorem.paragraphs,
+    title: 'Balanced human-resource implementation',
+    content: `Dignissimos doloribus odit reiciendis
+    molestias aut accusamus. Vel quam ratione voluptas. Sed ea maiores.
+    Cupiditate iste in laborum quia et. Blanditiis unde vero qui. Dolores
+    dolores natus mollitia et velit.`,
     access: 'public',
     userId: 3,
     userRoleId: 2,

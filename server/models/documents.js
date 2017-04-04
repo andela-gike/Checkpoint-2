@@ -40,8 +40,8 @@ module.exports = (sequelize, DataTypes) => {
     classMethods: {
       associate: (models) => {
         documents.belongsTo(models.users, {
-          onDelete: 'CASCADE',
-          foreignKey: 'userId'
+          foreignKey: 'userId',
+          onDelete: 'CASCADE'
         });
       }
     },

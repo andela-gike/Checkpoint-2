@@ -1,10 +1,9 @@
-import chai from 'chai';
+import { expect } from 'chai';
 import supertest from 'supertest';
 import app from '../../routes/index';
 import helpers from '../helpers/helpers';
 
 const request = supertest.agent(app);
-const should = chai.should();
 const users = helpers.legitUsers;
 
 
@@ -40,8 +39,8 @@ describe('Role API Spec', () => {
         })
         .expect(200)
         .end((err, response) => {
-          response.body.message.should.equal('The role was successfully created');
-          response.body.role.title.should.equal('lords');
+          expect(response.body.message).to.equal('The role was successfully created');
+          expect(response.body.role.title).to.equal('lords');
           done();
         });
     });
@@ -54,10 +53,10 @@ describe('Role API Spec', () => {
         })
         .expect(200)
         .end((err, response) => {
-          response.body.message
-            .should.equal('The role was successfully created');
-          response.body.role.title.should.equal('tester');
-          response.body.role.id.should.equal(5);
+          expect(response.body.message)
+            .to.equal('The role was successfully created');
+          expect(response.body.role.title).to.equal('tester');
+          expect(response.body.role.id).to.equal(5);
           done();
         });
     });
@@ -70,7 +69,7 @@ describe('Role API Spec', () => {
         })
         .expect(403)
         .end((err, response) => {
-          response.body.message.should.equal('Permission denied, admin only');
+          expect(response.body.message).to.equal('Permission denied, admin only');
           done();
         });
     });
@@ -83,7 +82,7 @@ describe('Role API Spec', () => {
         })
         .expect(400)
         .end((err, response) => {
-          response.body.message.should.equal('Title cannot be blank');
+          expect(response.body.message).to.equal('Title cannot be blank');
           done();
         });
     });
@@ -96,7 +95,7 @@ describe('Role API Spec', () => {
         })
         .expect(409)
         .end((err, response) => {
-          response.body.message.should.equal('Role already exists');
+          expect(response.body.message).to.equal('Role already exists');
           done();
         });
     });
@@ -109,9 +108,9 @@ describe('Role API Spec', () => {
         .set('authorization', adminUserToken)
         .expect(200)
         .end((err, response) => {
-          response.body.message.should
+          expect(response.body.message).to
           .equal('This is a list of the available roles');
-          should.exist(response.body.data);
+          expect(response.body.data).to.exist;
           done();
         });
     });
@@ -121,7 +120,7 @@ describe('Role API Spec', () => {
         .set('authorization', regularUserToken)
         .expect(403)
         .end((err, response) => {
-          response.body.message.should.equal('Permission denied, admin only');
+          expect(response.body.message).to.equal('Permission denied, admin only');
           done();
         });
     });
@@ -131,9 +130,9 @@ describe('Role API Spec', () => {
         .set('authorization', adminUserToken)
         .expect(200)
         .end((err, response) => {
-          response.body.message.should
+          expect(response.body.message).to
           .equal('The Role you want has been found');
-          should.exist(response.body.data);
+          expect(response.body.data).to.exist;
           done();
         });
     });
@@ -143,7 +142,7 @@ describe('Role API Spec', () => {
         .set('authorization', regularUserToken)
         .expect(403)
         .end((err, response) => {
-          response.body.message.should.equal('Permission denied, admin only');
+          expect(response.body.message).to.equal('Permission denied, admin only');
           done();
         });
     });
@@ -153,7 +152,7 @@ describe('Role API Spec', () => {
         .set('authorization', adminUserToken)
       .expect(404)
       .end((err, response) => {
-        response.body.message.should
+        expect(response.body.message).to
         .equal('Role with the id: 345673 does not exist');
         done();
       });
@@ -170,7 +169,7 @@ describe('Role API Spec', () => {
         })
         .expect(200)
         .end((err, response) => {
-          response.body.message.should.equal('Role was successfully updated');
+          expect(response.body.message).to.equal('Role was successfully updated');
           done();
         });
     });
@@ -183,7 +182,7 @@ describe('Role API Spec', () => {
         })
         .expect(403)
         .end((err, response) => {
-          response.body.message.should.equal('Permission denied, admin only');
+          expect(response.body.message).to.equal('Permission denied, admin only');
           done();
         });
     });
@@ -196,7 +195,7 @@ describe('Role API Spec', () => {
         })
         .expect(404)
         .end((err, response) => {
-          response.body.message.should
+          expect(response.body.message).to
           .equal('Cannot update a role that does not exist');
           done();
         });
@@ -210,7 +209,7 @@ describe('Role API Spec', () => {
         })
         .expect(404)
         .end((err, response) => {
-          response.body.message.should
+          expect(response.body.message).to
           .equal('You need to write the Title you want to update');
           done();
         });
@@ -224,7 +223,7 @@ describe('Role API Spec', () => {
         .set('authorization', adminUserToken)
         .expect(200)
         .end((err, response) => {
-          response.body.message.should.equal('Role was successfully deleted');
+          expect(response.body.message).to.equal('Role was successfully deleted');
           done();
         });
     });
@@ -234,7 +233,7 @@ describe('Role API Spec', () => {
         .set('authorization', regularUserToken)
         .expect(403)
         .end((err, response) => {
-          response.body.message.should.equal('Permission denied, admin only');
+          expect(response.body.message).to.equal('Permission denied, admin only');
           done();
         });
     });
@@ -244,7 +243,7 @@ describe('Role API Spec', () => {
         .set('authorization', adminUserToken)
         .expect(404)
         .end((err, response) => {
-          response.body.message.should
+          expect(response.body.message).to
           .equal('Cannot delete a role that does not exist');
           done();
         });

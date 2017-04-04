@@ -94,30 +94,9 @@ const UserController = {
   },
 
   findUserById(request, response) {
-    const userDetails = {
-      user: ['id', 'firstName', 'lastName', 'email', 'userName'],
-      role: ['id', 'title']
-    };
-    const query = {
-      where: {
-        id: request.params.id
-      },
-      attributes: userDetails.user,
-      include: [
-        {
-          model: db.roles,
-          attributes: userDetails.role
-        }
-      ]
-    };
     db.users
-      .findOne(query)
+      .findById(request.params.id)
       .then((user) => {
-        if (!user) {
-          return response.status(404).send({
-            message: 'The user was not found'
-          });
-        }
         if (user) {
           user.password = null;
           return response.status(200).send({ message: 'User found!', data: user });
@@ -149,7 +128,7 @@ const UserController = {
     query.offset = request.query.offset || null;
     query.order = [['createdAt', 'DESC']];
     db.users
-        .findAll({ query: query, limit: query.limit, offset: query.offset })
+      .findAll({ query: query, limit: query.limit, offset: query.offset })
       .then((allUsers) => {
         if (allUsers) {
           response.status(200).send({
@@ -181,16 +160,16 @@ const UserController = {
             userName: request.body.userName || user.userName,
             password: request.body.password || user.password
           })
-          .then((updatedProfile) => {
-            response.status(200).send({
-              message: 'User information updated successfully',
-              data: updatedProfile
+            .then((updatedProfile) => {
+              response.status(200).send({
+                message: 'User information updated successfully',
+                data: updatedProfile
+              });
             });
-          });
         } else {
           response.status(404).send({
             message:
-              'Cannot update the information of a user that does not exist'
+            'Cannot update the information of a user that does not exist'
           });
         }
       });
@@ -202,11 +181,11 @@ const UserController = {
       .then((user) => {
         if (user) {
           user.destroy()
-          .then(() => {
-            response.status(200).send({
-              message: 'User was deleted successfully'
+            .then(() => {
+              response.status(200).send({
+                message: 'User was deleted successfully'
+              });
             });
-          });
         } else {
           response.status(404).send({
             message: 'Cannot delete a user that does not exist'
@@ -229,7 +208,7 @@ const UserController = {
         if (!user) {
           return response.status(404).send({
             message:
-                'Cannot get the documents of a user that does not exist'
+            'Cannot get the documents of a user that does not exist'
           });
         }
         response.status(200).send({ message: 'Documents Found', data: user[0].documents });
@@ -237,29 +216,44 @@ const UserController = {
   },
 
   searchUser(request, response) {
+    const searchTerm = request.query.q;
+    if (!Object.keys(request.query).length || !searchTerm) {
+      return response.status(400).send({ message: 'Input a valid search term' });
+    }
+    const query = request.decodedToken.roleId === 1 ? {
+      where: {
+        $or: {
+          userName: { $iLike: `%${searchTerm}%` },
+          firstName: { $iLike: `%${searchTerm}%` },
+          lastName: { $iLike: `%${searchTerm}%` },
+        }
+      }
+    } : {
+      attributes: ['firstName', 'lastName', 'userName'],
+      where: {
+        $or: {
+          userName: { $iLike: `%${searchTerm}%` },
+          firstName: { $iLike: `%${searchTerm}%` },
+          lastName: { $iLike: `%${searchTerm}%` },
+        }
+      }
+    };
     db.users
-      .findAll({
-        where: {
-          userName: { $iLike: `%${request.query.q}%` }
-        }
-      })
-      .then((user) => {
-        if (!user) {
+      .findAll(query)
+      .then((result) => {
+        if (result.length === 0) {
           return response.status(404).send({
-            message: 'The user was not found'
+            message: 'No results were found'
           });
         }
-        if (user) {
-          return response.status(200).send({
-            message: 'User found!',
-            data: [user[0].firstName, user[0].lastName, user[0].userName]
-          });
-        }
+        return response.status(200).send({
+          message: 'Search Results!',
+          data: { result }
+        });
       })
-      .catch((err) => {
+      .catch(() => {
         response.status(404).send({
-          message: 'There was a problem getting user',
-          err
+          error: 'There user was not found'
         });
       });
   },

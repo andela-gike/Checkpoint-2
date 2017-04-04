@@ -98,7 +98,7 @@ const DocumentController = {
     const docAttributes = {
       doc: ['id', 'title', 'content', 'access',
         'userId', 'createdAt', 'updatedAt'],
-      user: ['id', 'username']
+      user: ['id', 'userName']
     };
     let query;
     if (request.decodedToken.roleId === 1) {
@@ -115,12 +115,25 @@ const DocumentController = {
     query.offset = request.query.offset || null;
     query.order = [['createdAt', 'DESC']];
     db.documents
-      .findAll({ where: query.where, limit: query.limit, offset: query.offset })
+      .findAll({
+        where: query.where,
+        order: query.order,
+        limit: query.limit,
+        offset: query.offset
+      })
       .then((docs) => {
         if (request.decodedToken.roleId === 1) {
-          response.status(200).send({ message: 'Showing all available documents', data: docs });
+          response.status(200).send({
+            message:
+            'Showing all documents',
+            data: docs
+          });
         } else {
-          response.status(200).send({ message: 'Showing all public documents', data: docs });
+          response.status(200).send({
+            message:
+            'Showing all public documents',
+            data: docs
+          });
         }
       });
   },
@@ -156,51 +169,25 @@ const DocumentController = {
   },
 
   searchDocument(request, response) {
-    if (!request.query.query) {
-      return response.send({ message: 'Search field cannot be empty' });
+    const searchTerm = request.query.q;
+    if (!Object.keys(request.query).length || !searchTerm) {
+      return response.status(400).send({ message: 'Unallowed search format' });
     }
-    // const query = {
-    //   where: {
-    //     $and: [
-    //       {
-    //         $or: [
-    //           { access: 'public' },
-    //           { ownerId: request.decodedToken.userId },
-    //           {
-    //             $and: [
-    //               { access: 'role' },
-    //               { ownerRoleId: request.decodedToken.roleId }
-    //             ]
-    //           }
-    //         ]
-    //       },
-    //       {
-    //         $or: [
-    //           { title: { like: `%${request.query.query}%` } },
-    //           { content: { like: `%${request.query.query}%` } }
-    //         ]
-    //       }
-    //     ]
-    //   },
-    //   limit: request.query.limit || null,
-    //   offset: request.query.offset || null,
-    //   order: [['createdAt', 'DESC']]
-    // };
-
     const query = {
       where: {
-        $or: [
-        // { access: 'public' },
-        { title: { $iLike: `%${request.query.q}%` } },
-        { content: { $iLike: `%${request.query.q}%` } },
-        { access: { $in: ['public'] } }
-        // { userId: req.decodedToken.userId }
-        ]
+        title: {
+          $iLike: `%${searchTerm}%`
+        }
       }
     };
     db.documents
       .findAll(query)
       .then((queriedDoc) => {
+        if (queriedDoc.length <= 0) {
+          return response.status(404).send({
+            message: 'No results were found'
+          });
+        }
         if (request.decodedToken.roleId === 1) {
           response.status(200).send({
             message: 'Search results from all documents',

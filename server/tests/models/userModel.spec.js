@@ -56,12 +56,6 @@ describe('The User Model Test Suite', () => {
       expect(user.password).to.not.equal(fakeUser.password);
     });
 
-    it('should ensure that a created user has a defined role', () =>
-      User.findById(user.id, { include: [Role] })
-        .then((createdUser) => {
-          expect(createdUser.Role.title).to.equal(fakeRole.title);
-        }));
-
     it('should allow for the updating of the details of a user', (done) => {
       User.findById(user.id)
         .then(createdUser => createdUser.update({ userName: 'grace' }))
