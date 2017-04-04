@@ -1,5 +1,5 @@
 import express from 'express';
-import RoleController from '../controllers/RoleController';
+import RoleController from '../controllers/roleController';
 import Authentication from '../middleware/authentication';
 
 const roleRouter = express.Router();
