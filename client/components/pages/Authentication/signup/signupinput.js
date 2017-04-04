@@ -86,7 +86,7 @@ class Signupinput extends React.Component {
           <form className="col s12" onSubmit={this.onSubmit}>
             <div className="row">
               <div className="input-field col s12">
-                <h4 className="center login-form-text">Create new acount</h4>
+                <h4 className="center login-form-text">Create new account</h4>
               </div>
             </div>
             <div className={classname('row margin', { 'has-error': errors.firstName })}>

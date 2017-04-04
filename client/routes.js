@@ -6,6 +6,7 @@ import AboutPage from './components/pages/Landingpage/Aboutpage';
 import LoginPage from './components/pages/Authentication/login/loginpage';
 import SignUpPage from './components/pages/Authentication/signup/signupPage';
 import Dashboard from './components/pages/Dashboard/Dashboard';
+import DocumentPage from './components/pages/Documents/documentIndex';
 
 export default (
     <Route path="/" component={App}>
@@ -13,7 +14,7 @@ export default (
       <Route path="signup" component={SignUpPage} />
       <Route path="about" component={AboutPage} />
       <Route path="login" component={LoginPage} />
-      <Route path="login" component={LoginPage} />
+      <Route path="documents" component={DocumentPage} />
     </Route>
 );
 

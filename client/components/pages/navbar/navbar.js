@@ -12,13 +12,15 @@ class Navbar extends React.Component {
     const { isAuthenticated } = this.props.auth;
 
     const userLinks = (
-      <ul className="right hide-on-med-and-down">
+      <ul className="navbar navbar-light brown darken-2 right hide-on-med-and-down">
+        <li><Link to="/dashboard" activeClassName="active">Dashboard</Link></li>
+        <li><Link to="/documents" activeClassName="active">Documents</Link></li>
         <li><a href="#" onClick={this.logout.bind(this)}>LogOut</a></li>
       </ul>
     );
 
     const guestLinks = (
-      <ul className="right hide-on-med-and-down">
+      <ul className="right hide-on-med-and-down navbar navbar-light brown darken-2">
         <li><Link to="/signup" activeClassName="active">Sign up</Link></li>
         <li><Link to="/login" activeClassName="active">Login</Link></li>
       </ul>
@@ -30,10 +32,7 @@ class Navbar extends React.Component {
           <IndexLink to="/" activeClassName="active">Home</IndexLink>
           <ul className="right hide-on-med-and-down">
             <li><Link to="/about" activeClassName="active">About</Link></li>
-            <li><Link to="/dashboard" activeClassName="active">Dashboard</Link></li>
             <li><Link to="/documents" activeClassName="active">Documents</Link></li>
-            <li><Link to="/signup" activeClassName="active">Sign up</Link></li>
-            <li><Link to="/login" activeClassName="active">Login</Link></li>
           </ul>
         </div>
         <div className="navbar-wrapper">
