@@ -37,7 +37,16 @@ describe('Search Spec', () => {
         .set('authorization', regularUserToken)
         .expect(200)
         .end((err, response) => {
-          expect(response.body.message).to.equal('Search results from public documents');
+          expect(response.body.message).to.equal('Search results for all documents');
+          done();
+        });
+    });
+    it('should show a regular user search results from public documents', (done) => {
+      request.get('/api/search/documents/?q=Digitized')
+        .set('authorization', adminUserToken)
+        .expect(200)
+        .end((err, response) => {
+          expect(response.body.message).to.equal('Search results for all documents');
           done();
         });
     });

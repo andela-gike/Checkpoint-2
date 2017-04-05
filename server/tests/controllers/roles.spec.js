@@ -44,22 +44,6 @@ describe('Role API Spec', () => {
           done();
         });
     });
-    it('should allow an admin to create roles with a role id', (done) => {
-      request.post('/api/roles')
-        .set('authorization', adminUserToken)
-        .send({
-          title: 'tester',
-          id: 5
-        })
-        .expect(200)
-        .end((err, response) => {
-          expect(response.body.message)
-            .to.equal('The role was successfully created');
-          expect(response.body.role.title).to.equal('tester');
-          expect(response.body.role.id).to.equal(5);
-          done();
-        });
-    });
     it('should not allow a regular user to create roles', (done) => {
       request
         .post('/api/roles')

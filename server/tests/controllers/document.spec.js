@@ -146,7 +146,7 @@ describe('Document API Spec', () => {
           title: '',
           content: '',
         })
-        .expect(404)
+        .expect(400)
         .end((err, response) => {
           expect(response.body).to.be.an('object');
           expect(response.body.message).to.equal('No update detected');

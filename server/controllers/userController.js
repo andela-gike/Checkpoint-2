@@ -22,7 +22,7 @@ const UserController = {
     db.users.findOne({ where: { $or: { email, userName } } })
       .then((userExists) => {
         if (userExists) {
-          return response.status(409).send({
+          return response.status(400).send({
             message: `There is a user already existing
             with this email or userName`
           });
@@ -58,7 +58,7 @@ const UserController = {
       })
       .then((user) => {
         if (!user) {
-          return response.status(406).send({
+          return response.status(400).send({
             message: 'User was not found'
           });
         }
@@ -85,7 +85,7 @@ const UserController = {
         }
       })
       .catch((err) => {
-        response.status(401).send({
+        response.status(400).send({
           message:
           'There was a problem while logging in due to invalid credentials',
           err
@@ -138,7 +138,7 @@ const UserController = {
         }
       })
       .catch((err) => {
-        response.status(404).send({
+        response.status(400).send({
           message: 'There was a problem getting all users',
           err
         });

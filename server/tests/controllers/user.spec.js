@@ -65,7 +65,7 @@ describe('User Routes Spec', () => {
     it('should not register user with an already existing email', (done) => {
       request.post('/api/users')
         .send(users[2])
-        .expect(409)
+        .expect(400)
         .end((err, response) => {
           expect(typeof response.body).to.equal('object');
           expect(response.body.message).to.equal(`There is a user already existing

@@ -32,6 +32,7 @@
     "mocha-lcov-reporter": "^1.3.0",
     "moment": "^2.17.1",
     "morgan": "^1.8.1",
+    "nodemon": "^1.11.0",
     "pg": "^6.1.2",
     "pg-hstore": "^2.3.2",
     "request": "^2.81.0",
@@ -50,6 +51,7 @@
     "webpack": "^2.2.1"
   },
   "scripts": {
+    "start": "nodemon ./server --exec babel-node --presets es2015,react,airbnb,stage-2",
     "start:dev": "nodemon ./server --exec babel-node --presets es2015,react,airbnb,stage-2",
     "test": "NODE_ENV=test && sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all && node_modules/.bin/babel-node ./node_modules/babel-istanbul/lib/cli.js cover node_modules/.bin/_mocha ./server/tests/**/*.spec.js --recursive",
     "test_db_migrate": "sequelize db:migrate",

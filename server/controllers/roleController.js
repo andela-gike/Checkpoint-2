@@ -3,15 +3,12 @@ import db from '../models';
 const RoleController = {
   createNewRole(request, response) {
     let roleData = {};
-    if (request.body.id) {
-      roleData = { title: request.body.title, id: request.body.id };
-    } else { roleData = { title: request.body.title }; }
+    roleData = { title: request.body.title };
     if (!request.body.title) {
       return response.status(400).send({ message: 'Title cannot be blank' });
     }
-    const title = request.body.title;
     db.roles.findOne({
-      where: { title }
+      where: { title: request.body.title }
     })
     .then((result) => {
       if (result) {
@@ -30,7 +27,9 @@ const RoleController = {
         });
       })
       .catch((err) => {
-        response.status(400).send({ message: 'error', err });
+        response.status(400).send({ message:
+          'There was a error creating this role',
+          err });
       });
     });
   },
@@ -40,11 +39,13 @@ const RoleController = {
       .findById(request.params.id)
       .then((role) => {
         if (!role) {
-          return response.status(404).send({ message: 'Cannot update a role that does not exist' });
+          return response.status(404).send({ message:
+            'Cannot update a role that does not exist' });
         }
         const title = request.body.title;
         if (!title) {
-          return response.status(404).send({ message: 'You need to write the Title you want to update' });
+          return response.status(404).send({ message:
+            'You need to write the Title you want to update' });
         }
         role.update({
           title: request.body.title || role.title
@@ -79,10 +80,13 @@ const RoleController = {
     db.roles
       .findAll()
       .then((allRoles) => {
-        response.status(200).send({ message: 'This is a list of the available roles', data: allRoles });
+        response.status(200).send({ message:
+          'This is a list of the available roles',
+          data: allRoles });
       })
       .catch((err) => {
-        response.status(404).send({ message: 'A problem was encountered while getting roles', err });
+        response.status(404).send({ message:
+          'A problem was encountered while getting roles', err });
       });
   },
 
@@ -91,9 +95,12 @@ const RoleController = {
       .findById(request.params.id)
       .then((role) => {
         if (!role) {
-          return response.status(404).send({ message: `Role with the id: ${request.params.id} does not exist` });
+          return response.status(404).send({ message:
+            `Role with the id: ${request.params.id} does not exist` });
         }
-        response.status(200).send({ message: 'The Role you want has been found', data: role });
+        response.status(200).send({ message:
+          'The Role you want has been found',
+          data: role });
       });
   }
 };

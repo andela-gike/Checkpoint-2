@@ -40,7 +40,7 @@ const DocumentController = {
 
   updateDocument(request, response) {
     if (!request.body.title && !request.body.content) {
-      return response.status(406).send({
+      return response.status(400).send({
         message: 'No update detected'
       });
     }
@@ -188,17 +188,10 @@ const DocumentController = {
             message: 'No results were found'
           });
         }
-        if (request.decodedToken.roleId === 1) {
-          response.status(200).send({
-            message: 'Search results from all documents',
-            data: queriedDoc
-          });
-        } else {
-          response.status(200).send({
-            message: 'Search results from public documents',
-            data: queriedDoc
-          });
-        }
+        return response.status(200).send({
+          message: 'Search results for all documents',
+          data: queriedDoc
+        });
       });
   }
 };
