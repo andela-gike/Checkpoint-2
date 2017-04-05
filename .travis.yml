@@ -10,6 +10,6 @@ before_install:
 services:
   - postgresql
 script:
-  - npm run coveralls
+  - npm test
 addons:
   postgresql: "9.3"
