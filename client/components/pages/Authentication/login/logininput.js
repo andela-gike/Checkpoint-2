@@ -1,6 +1,7 @@
 import React from 'react';
 import classname from 'classnames';
 import { connect } from 'react-redux';
+import toastr from 'toastr';
 import loginValidator from '../../../../../server/validation/loginvalidator';
 import { login } from '../../../../actions/loginActions';
 
@@ -36,9 +37,15 @@ class LoginInput extends React.Component {
     if (this.isValid()) {
       this.setState({ errors: {}, isLoading: true });
       this.props.login(this.state).then(
-        res => this.context.router.push('/'),
-        err => this.setState({ errors: err.response.data.errors, isLoading: false })
-      );
+       () => {
+          this.context.router.push('/');
+          toastr.success('Logged in Successfully');
+        }
+      ).catch(() => {
+        this.props.addFlashMessage({
+          type: 'error',
+          text: 'Unable to login user, please try again' });
+      });
     }
   }
   render() {

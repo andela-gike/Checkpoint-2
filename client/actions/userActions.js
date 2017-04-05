@@ -80,7 +80,7 @@ export function deleteChosenUser() {
  */
 export function retrieveUsers() {
   return (dispatch) => {
-    return axios.get('/api/user').then((response) => {
+    return axios.get('/api/users').then((response) => {
       dispatch(retrieveUserSuccess(response.data.user));
     }).catch((error) => {
       throw (error);
@@ -97,7 +97,7 @@ export function retrieveUsers() {
  */
 export function getUserById(id) {
   return (dispatch) => {
-    return axios.get(`/api/user/${id}`)
+    return axios.get(`/api/users/${id}`)
       .then((response) => {
         dispatch(getUserByIdSuccess(response.data.user.name));
       }).catch((error) => {

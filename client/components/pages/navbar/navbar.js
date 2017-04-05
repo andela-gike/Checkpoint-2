@@ -32,7 +32,6 @@ class Navbar extends React.Component {
           <IndexLink to="/" activeClassName="active">Home</IndexLink>
           <ul className="right hide-on-med-and-down">
             <li><Link to="/about" activeClassName="active">About</Link></li>
-            <li><Link to="/documents" activeClassName="active">Documents</Link></li>
           </ul>
         </div>
         <div className="navbar-wrapper">
