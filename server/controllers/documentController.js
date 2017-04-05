@@ -64,7 +64,7 @@ const DocumentController = {
               data: updatedDoc
             }));
         } else {
-          response.status(401).send({ message: 'Permission denied' });
+          response.status(403).send({ message: 'Permission denied' });
         }
       });
   },

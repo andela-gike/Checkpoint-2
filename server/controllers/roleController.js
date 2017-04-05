@@ -20,7 +20,7 @@ const RoleController = {
       return db.roles
       .create(roleData)
       .then((role) => {
-        response.status(200).send({
+        response.status(201).send({
           message:
           'The role was successfully created',
           role
@@ -35,17 +35,17 @@ const RoleController = {
   },
 
   updateRole(request, response) {
+    const title = request.body.title;
+    if (!title) {
+      return response.status(404).send({ message:
+        'You need to write the Title you want to update' });
+    }
     db.roles
       .findById(request.params.id)
       .then((role) => {
         if (!role) {
           return response.status(404).send({ message:
             'Cannot update a role that does not exist' });
-        }
-        const title = request.body.title;
-        if (!title) {
-          return response.status(404).send({ message:
-            'You need to write the Title you want to update' });
         }
         role.update({
           title: request.body.title || role.title

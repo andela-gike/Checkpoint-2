@@ -216,25 +216,25 @@ const UserController = {
   },
 
   searchUser(request, response) {
-    const searchTerm = request.query.q;
-    if (!Object.keys(request.query).length || !searchTerm) {
+    const searchName = request.query.q;
+    if (!Object.keys(request.query).length || !searchName) {
       return response.status(400).send({ message: 'Input a valid search term' });
     }
     const query = request.decodedToken.roleId === 1 ? {
       where: {
         $or: {
-          userName: { $iLike: `%${searchTerm}%` },
-          firstName: { $iLike: `%${searchTerm}%` },
-          lastName: { $iLike: `%${searchTerm}%` },
+          userName: { $iLike: `%${searchName}%` },
+          firstName: { $iLike: `%${searchName}%` },
+          lastName: { $iLike: `%${searchName}%` },
         }
       }
     } : {
       attributes: ['firstName', 'lastName', 'userName'],
       where: {
         $or: {
-          userName: { $iLike: `%${searchTerm}%` },
-          firstName: { $iLike: `%${searchTerm}%` },
-          lastName: { $iLike: `%${searchTerm}%` },
+          userName: { $iLike: `%${searchName}%` },
+          firstName: { $iLike: `%${searchName}%` },
+          lastName: { $iLike: `%${searchName}%` },
         }
       }
     };

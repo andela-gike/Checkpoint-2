@@ -36,23 +36,8 @@ const Authentication = {
           });
         }
       });
-  },
-
-  logout(request, response, next) {
-    const token = request.headers.token || request.headers.authorization ||
-      request.headers['x-access-token'];
-    if (!token) {
-      return response.status(401).send({ message: 'You must be logged in' });
-    }
-    const decoded = request.decodedToken;
-    if (token && decoded) {
-      delete request.headers.token;
-      delete request.headers.authorization;
-      delete request.headers['x-access-token'];
-      delete request.decodedToken;
-      next();
-    }
   }
+
 };
 
 export default Authentication;
