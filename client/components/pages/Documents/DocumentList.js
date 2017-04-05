@@ -1,134 +1,101 @@
 import React, { PropTypes } from 'react';
-import toastr from 'toastr';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import ReduxSweetAlert, { swal, close } from 'react-redux-sweetalert';
-import { addFlashMessage } from '../../../actions/flashMessages';
-import * as documentActions from '../../../actions/documentActions';
+import { Modal, Button, Row, Input } from 'react-materialize';
+import moment from 'moment';
+import {Link} from 'react-router';
+import {connect} from 'react-redux';
+import DocumentTitle from './DocumentTitle';
+import DocumentContent from './DocumentContent';
+import * as DocumentAction from '../../../actions/documentActions';
 
-class DocumentList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      id: 0
-    };
-    this.editDocument = this.editDocument.bind(this);
-    this.deleteDocument = this.deleteDocument.bind(this);
-    this.renderAlert = this.renderAlert.bind(this);
-  }
 
-  componentDidMount() {
-    $('.tooltipped').tooltip({ delay: 50 });
-  }
-  editDocument(e) {
+class DocumentList extends React.Component{
+      constructor (props) {
+        super(props);
+        const { updateDocument } = this.props;
+        const { deleteDocument } = this.props;
+        this.state = {
+          id: '',
+          title: '',
+          content: '',
+          access: '',
+        };
+      }
+      fieldChange(e) {
+         return this.setState({ [e.target.name]: e.target.value });
+      }
+    deleteDoc (id) {
+       this.props.deleteDocument(id);
+    }
+    onSubmit(e){
     e.preventDefault();
-    const documentId = e.target.id;
-    this.props.actions.setCurrentDocument(documentId);
+     const id = e.target.id.value;
+     const title = e.target.title.value;
+     const access = e.target.access.value;
+     const content = e.target.content.defaultValue;
+     const documentDetails = { id, title, access, content};
+     this.props.updateDocument(documentDetails);
   }
-  deleteDocument() {
-    const documentId = this.state.id;
-    this.props.actions.deleteDocument(documentId)
-    .then(() => toastr.success('Document Successfully Deleted'))
-    .catch(() => {
-      this.props.addFlashMessage({
-        type: 'error',
-        text: 'Unable to delete document' });
-      toastr.error(
-        'Unable to delete document');
-    });
-    this.setState({ id: 0 });
-  }
+  render () {
+    const doc = this.props.documents;
 
-  renderAlert(e) {
-    e.preventDefault();
-    let id = this.state.id;
-    id = e.target.id;
-    this.setState({ show: true, id });
-    this.props.swal({
-      title: 'Warning!',
-      text: 'Are you sure?',
-      type: 'info',
-      showCancelButton: true,
-      onConfirm: this.deleteDocument,
-      onCancel: this.props.close,
-    });
-  }
-  render() {
     return (
-      <div>
-
-        {this
-          .props
-          .myDocuments
-          .map(document => <div id="card-alert" className="card white"
-          key={document.id}>
-            <div className="card-content pink-text">
-              <a className="pointer tooltipped"
-                data-position="bottom" data-delay="50"
-                data-tooltip="click on me to view"
-                href="#modal1" id={document.id}
-                onClick={this.editDocument}>
-              Title: {document.title}
-              <span className="badge list-badge">
-                Access: {document.viewAccess}</span>
-              </a>
-
-
+    <div className="row">
+    {doc && doc.map(document =>
+    <div key={document.id}>
+        <div className="col s3">
+          <div className="card white darken-1" style={{ height: 300 }}>
+            <div className="card-content black-text">
+              <DocumentTitle document={document} />
+              <DocumentContent document={document} />
             </div>
-            <div className="fixed-action-btn horizontal click-to-toggle edit">
-              <a className="btn-floating pink tooltipped"
-                data-position="top" data-delay="50"
-                data-tooltip="click to view more"
-                >
-                <i className="material-icons">more_vert</i>
-              </a>
-              <ul>
-                <li onClick={this.editDocument} className="editDoc">
-                  <a href="#modal1"
-                  className="btn-floating pink tooltipped"
-                  data-position="bottom" data-delay="50"
-                  data-tooltip="edit document">
-                    <i id={document.id} className="material-icons">mode_edit</i>
-                  </a>
-                </li>
-                <li onClick={this.renderAlert}>
-                  <a className="btn-floating red darken-1 tooltipped"
-                    data-position="bottom" data-delay="50"
-                    data-tooltip="delete document"
-                    >
-                    <i id={document.id} className="material-icons">delete</i>
-                  </a>
-                </li>
-              </ul>
+            <div className="card-action">
+              <a>Published: {moment(document.createdAt).format('MMMM Do YYYY')}</a> <br/>
+              <div className="card-action">
+                  <Modal
+                    header='Edit Document'
+                    trigger={
+                    <Button waves='light' className="btn-floating btn-large blue darken-4 right"><i className="large material-icons">mode_edit</i></Button>
+                    }>
+                    <form className="col s12" method="post" onSubmit={(e) => this.onSubmit(e)} >
+                   <Row>
+                      <Input s={6}  value="DOC ID" />
+                      <Input s={6} name = "id" value={document.id} />
+                  </Row>
+                  <Row>
+                      <Input s={6} name = "title" value={this.state.title === '' ? document.title : this.state.title} onChange={(e) => this.fieldChange(e)}  />
+                      <Input  s={6} name = "access"  value={this.state.access === '' ? document.access : this.state.access} onChange={(e) => this.fieldChange(e)}   />
+
+                  </Row>
+                   <Row>
+                      <textarea name = "content" value={this.state.content === '' ? document.content : this.state.content} onChange={(e) => this.fieldChange(e)} label="Content" className="materialize-textarea"/>
+                  </Row>
+                  <Button className="blue darken-4" waves='light' type="submit">UPDATE</Button>
+                </form>
+                </Modal>
+                <Button waves='light' onClick={(e) => this.deleteDoc(document.id)}  className="btn-floating btn-large red darken-2 right"><i className="large material-icons">delete</i></Button>
+              </div>
             </div>
-          </div>)}
-          <ReduxSweetAlert />
+          </div>
+        </div>
       </div>
-    );
-  }
-}
-
-DocumentList.propTypes = {
-  actions: React.PropTypes.object.isRequired,
-  myDocuments: React.PropTypes.array.isRequired,
-  swal: PropTypes.func.isRequired,
-  close: PropTypes.func.isRequired,
-  addFlashMessage: React.PropTypes.func.isRequired,
+      )}
+      </div>
+  );
 };
 
-/**
- *
- * dispatch document actions
- * @param {any} dispatch
- * @returns {any}
- */
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators(documentActions, dispatch),
-    swal: bindActionCreators(swal, dispatch),
-    close: bindActionCreators(close, dispatch),
-    addFlashMessage: bindActionCreators(addFlashMessage, dispatch)
-  };
-}
+  }
 
-export default connect(null, mapDispatchToProps)(DocumentList);
+// DocumentList.PropTypes = {updatedDocDetails: React.PropTypes.func.isRequired};
+const mapDispatchToProps = dispatch => ({
+  updateDocument: documentDetails => dispatch(DocumentAction.updateDocument(documentDetails)),
+  deleteDocument: id => dispatch(DocumentAction.deleteDocument(id))
+});
+
+const mapStateToProps = (state) => {
+  return {
+    documentDetails: state.documents
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DocumentList);
+// export default DocumentList;

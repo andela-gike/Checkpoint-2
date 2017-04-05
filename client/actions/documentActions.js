@@ -94,16 +94,16 @@ export function loadAllDocuments() {
  * @param {any} document
  * @returns {object} documents
  */
-export function saveDocument(document) {
-  return (dispatch) => {
-    return axios.post('/api/documents/', document)
-      .then(() => {
-        dispatch(loadUserDocuments());
-      }).catch((error) => {
-        throw (error);
-      });
-  };
-}
+// export function saveDocument(document) {
+//   return (dispatch) => {
+//     return axios.post('/api/documents', document)
+//       .then(() => {
+//         dispatch(loadUserDocuments());
+//       }).catch((error) => {
+//         throw (error);
+//       });
+//   };
+// }
 
 /**
  * @export
