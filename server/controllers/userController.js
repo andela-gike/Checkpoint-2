@@ -38,7 +38,12 @@ const UserController = {
             return response.status(201).send({
               message: 'User was successfully created',
               token,
-              data: user
+              user: {
+                id: user.id,
+                userName: user.userName,
+                userRoleId: user.roleId,
+                email: user.email
+              }
             });
           })
           .catch((err) => {

@@ -48,7 +48,7 @@ describe('User Routes Spec', () => {
           expect(typeof response.body).to.equal('object');
           expect(response.body.token).to.exist;
           expect(response.body.message).to.equal('User was successfully created');
-          expect(response.body.data.userName).to.equal('blissbert');
+          expect(response.body.user.userName).to.equal('blissbert');
           done();
         });
     });
