@@ -8,7 +8,7 @@ import SignUpPage from './components/pages/Authentication/signup/signupPage';
 // import Dashboard from './components/pages/Dashboard/Dashboard';
 import DocumentPage from './components/pages/Documents/DocumentPage';
 // import DocumentDisplayer from './components/pages/Documents/DocumentDisplayer';
-// import DocumentForm from './components/pages/Documents/DocumentForm';
+import DocumentEditor from './components/pages/Documents/DocumentEditor';
 import requireAuth from './utils/requireAuth';
 
 
@@ -19,6 +19,7 @@ export default (
       <Route path="about" component={AboutPage} />
       <Route path="login" component={LoginPage} />
       <Route path="documents" component={requireAuth(DocumentPage)} />
+      <Route path="createdocuments" component={DocumentEditor} />
     </Route>
 );
 

@@ -15,6 +15,7 @@ class Navbar extends React.Component {
       <ul className="navbar navbar-light brown darken-2 right hide-on-med-and-down">
         <li><Link to="/dashboard" activeClassName="active">Dashboard</Link></li>
         <li><Link to="/documents" activeClassName="active">Documents</Link></li>
+        <li><Link to="/createdocuments" activeClassName="active">Add Documents</Link></li>
         <li><a href="#" onClick={this.logout.bind(this)}>LogOut</a></li>
       </ul>
     );
