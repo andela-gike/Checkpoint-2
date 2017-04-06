@@ -4,7 +4,7 @@ import db from '../models';
 
 dotenv.config({ silent: true });
 
-const secret = process.env.SECRET_TOKEN_KEY || 'Happypeopledontkeepsecret';
+const secret = process.env.SECRET || 'Happypeopledontkeepsecret';
 
 const Authentication = {
   verifyUser(request, response, next) {

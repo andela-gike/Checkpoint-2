@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import classname from 'classnames';
-import signupValidators from '../../../../../server/validation/signupvalidator';
+// import signupValidators from '../../../../../server/validation/signupvalidator';
 
 class Signupinput extends React.Component {
   constructor(props) {
@@ -28,15 +28,15 @@ class Signupinput extends React.Component {
     this.setState({ [e.target.id]: e.target.value });
   }
 
-  isValid() {
-    const { errors, isValid } = signupValidators(this.state);
+  // isValid() {
+  //   const { errors, isValid } = signupValidators(this.state);
 
-    if (!isValid) {
-      this.setState({ errors });
-    }
+  //   if (!isValid) {
+  //     this.setState({ errors });
+  //   }
 
-    return isValid;
-  }
+  //   return isValid;
+  // }
 
   checkUserExists(e) {
     const field = e.target.name;
@@ -60,20 +60,21 @@ class Signupinput extends React.Component {
   onSubmit(e) {
     e.preventDefault();
 
-    if (this.isValid()) {
-      this.setState({ errors: {}, isLoading: true });
+    // if (this.isValid()) {
+    //   this.setState({ errors: {}, isLoading: true });
       this.props.userSignupRequest(this.state).then(
         () => {
           this.props.addFlashMessage({
             type: 'success',
             text: 'You have successfully signed up. Welcome!'
           });
-          this.context.router.push('/login');
+          console.log('4444444444', this.state);
+          this.context.router.push('/createdocuments');
         },
         (err) => this.setState({ errors: err.response.data, isLoading: false })
       );
       console.log(this.state);
-    }
+   // }
   }
 
 
@@ -127,7 +128,6 @@ class Signupinput extends React.Component {
                   type="email"
                   value={this.state.email}
                   onChange={this.onChange}
-                  onBlur={this.checkUserExists}
                 />
                 <label htmlFor="email" className="left-align">email</label>
                 {errors.email && <span className="help-block">{errors.email}</span>}
@@ -142,7 +142,6 @@ class Signupinput extends React.Component {
                   type="text"
                   value={this.state.userName}
                   onChange={this.onChange}
-                  onBlur={this.checkUserExists}
                 />
                 <label htmlFor="userName" className="left-align">userName</label>
               </div>
@@ -175,10 +174,6 @@ class Signupinput extends React.Component {
                 <label htmlFor="confirmPassword" className="left-align">Confirm Password</label>
               </div>
               {errors.confirmPass && <span className="help-block">{errors.confirmPass}</span>}
-            </div>
-            <div className="row margin role-select">
-              <h6 className="left-align">Select role</h6>
-              <select></select>
             </div>
             <div className="row">
               <div className="input-field col s12 signup-btn">

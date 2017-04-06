@@ -19,9 +19,9 @@ class DocumentEditor extends React.Component {
     this.handleEditorchange = this.handleEditorchange.bind(this);
   }
 
-  componentDidMount() {
-     this.props.loadAllDocuments();
-  }
+  // componentDidMount() {
+  //    this.props.loadAllDocuments();
+  // }
 
   handleFormSubmit(event) {
     event.preventDefault();
@@ -73,7 +73,7 @@ class DocumentEditor extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  loadAllDocuments: () => dispatch(documentActions.loadAllDocuments()),
+  // loadAllDocuments: () => dispatch(documentActions.loadAllDocuments()),
   saveDocument: document => dispatch(documentActions.saveDocument(document))
 });
 

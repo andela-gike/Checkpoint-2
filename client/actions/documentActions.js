@@ -74,20 +74,20 @@ export function loadUserDocuments() {
   };
 }
 
-/**
- * @export
- * @returns {object} documents
- */
-export function loadAllDocuments() {
-  return (dispatch) => {
-    return axios.get('/api/documents')
-      .then((response) => {
-        dispatch(loadDocumentSuccess(response.data));
-      }).catch((error) => {
-        throw (error);
-      });
-  };
-}
+// /**
+//  * @export
+//  * @returns {object} documents
+//  */
+// export function loadAllDocuments() {
+//   return (dispatch) => {
+//     return axios.get('/api/documents')
+//       .then((response) => {
+//         dispatch(loadDocumentSuccess(response.data));
+//       }).catch((error) => {
+//         throw (error);
+//       });
+//   };
+// }
 
 /**
  * @export
@@ -95,8 +95,10 @@ export function loadAllDocuments() {
  * @returns {object} documents
  */
 export function saveDocument(document) {
+  // const token = localStorage.getItem('jwtToken');
   return (dispatch) => {
     return axios.post('/api/documents', document)
+    // .set({ 'x-access-token': token })
       .then(() => {
         dispatch(loadUserDocuments());
       }).catch((error) => {
