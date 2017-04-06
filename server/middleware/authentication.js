@@ -6,45 +6,38 @@ dotenv.config({ silent: true });
 
 const secret = process.env.SECRET || 'Happypeopledontkeepsecret';
 
-class Authentication {
-  static verifyUser(req, res, next) {
-    const token = req.body.token || req.query.token || req.headers.authorization || req.headers['x-access-token'];
+const Authentication = {
+  verifyUser(request, response, next) {
+    const token = request.body.token || request.query.token ||
+      request.headers.authorization || request.headers['x-access-token'];
     if (!token) {
-      return res.status(401).send({ message: 'Verification failed' });
+      return response.status(401).send({ message: 'No token was provided' });
     }
     jwt.verify(token, secret, (err, decoded) => {
       if (err) {
-        res.status(401).send({ message: 'Invalid token' });
+        response.status(401).send({ message: 'Invalid token' });
       } else {
-        req.decodedToken = decoded;
+        request.decodedToken = decoded;
         next();
       }
     });
-  }
+  },
 
-  static verifyAdmin(req, res, next) {
+  verifyAdmin(request, response, next) {
     db.roles
-      .findById(req.decodedToken.roleId)
+      .findById(request.decodedToken.roleId)
       .then((role) => {
-        if (role.title === 'admin' || role.id === 1) {
+        if (role.title === 'admin') {
           next();
         } else {
-          return res.status(403).send({ message: 'Permission denied, admin only' });
+          return response.status(403).send({
+            message:
+            'Permission denied, admin only'
+          });
         }
       });
   }
 
-  static logout(req, res, next) {
-    const token = req.headers.token || req.headers.authorization || req.headers['x-access-token'];
-    const decoded = req.decodedToken;
-    if (token && decoded) {
-      delete req.headers.token;
-      delete req.headers.authorization;
-      delete req.headers['x-access-token'];
-      delete req.decodedToken;
-      next();
-    }
-  }
-}
+};
 
 export default Authentication;

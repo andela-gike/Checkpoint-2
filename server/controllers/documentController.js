@@ -2,181 +2,196 @@ import db from '../models';
 
 
 const DocumentController = {
-  createNewDocument(req, res) {
-    db.documents
-      .create({
-        title: req.body.title,
-        content: req.body.content,
-        access: req.body.access || 'public',
-        userId: req.decodedToken.userId,
-        userRoleId: req.decodedToken.roleId
-      })
-      .then((document) => {
-        res.status(201).send({
-          message: 'Document created successfully',
-          data: document
-        });
-      })
-      .catch((err) => {
-        res.status(400).send({
-          message: 'There was an error while creating the document', err
-        });
+  createNewDocument(request, response) {
+    if (!request.body.title || !request.body.content) {
+      return response.status(400).send({
+        message:
+        'The title or the content of the document is empty'
+      });
+    }
+    db.documents.findOne({ where: { title: request.body.title } })
+      .then((documentExists) => {
+        if (documentExists) {
+          return response.status(400).send({
+            message: 'This document already exists'
+          });
+        }
+        db.documents
+          .create({
+            title: request.body.title,
+            content: request.body.content,
+            access: request.body.access || 'public',
+            userId: request.decodedToken.userId,
+            userRoleId: request.decodedToken.roleId
+          })
+          .then((document) => {
+            response.status(201).send({
+              message: 'Document created successfully',
+              data: document
+            });
+          })
+          .catch((err) => {
+            response.status(400).send({
+              message: 'There was an error while creating the document', err
+            });
+          });
       });
   },
 
-  updateDocument(req, res) {
+  updateDocument(request, response) {
+    if (!request.body.title && !request.body.content) {
+      return response.status(400).send({
+        message: 'No update detected'
+      });
+    }
     db.documents
-      .findById(req.params.id)
+      .findById(request.params.id)
       .then((doc) => {
         if (!doc) {
-          return res.status(404).send({
+          return response.status(404).send({
             message:
-            'The document was not found'
+            'Cannot update a document that does not exist'
           });
         }
-        if (parseInt(doc.userId, 10) === req.decodedToken.userId) {
+        if (parseInt(doc.userId, 10) === request.decodedToken.userId) {
           doc.update({
-            title: req.body.title || doc.title,
-            content: req.body.content || doc.content,
-            access: req.body.access || doc.access
+            title: request.body.title || doc.title,
+            content: request.body.content || doc.content,
+            access: request.body.access || doc.access
           })
-            .then(updatedDoc => res.status(200).send({
+            .then(updatedDoc => response.status(200).send({
               message: 'The document was updated successfully',
               data: updatedDoc
             }));
         } else {
-          res.status(401).send({ message: 'Permission denied' });
+          response.status(403).send({ message: 'Permission denied' });
         }
       });
   },
 
-  deleteDocument(req, res) {
+  deleteDocument(request, response) {
     db.documents
-      .findById(req.params.id)
+      .findById(request.params.id)
       .then((doc) => {
         if (!doc) {
-          return res.status(404).send({
+          return response.status(404).send({
             message:
-            'The document was not found'
+            'Cannot delete a document that does not exist'
           });
         }
-        if (parseInt(doc.userId, 10) === req.decodedToken.userId) {
+        if (parseInt(doc.userId, 10) === request.decodedToken.userId) {
           doc.destroy()
             .then(() => {
-              res.status(200).send({
+              response.status(200).send({
                 message: 'The document was deleted successfully'
               });
             });
         } else {
-          res.status(401).send({
+          response.status(401).send({
             message: ' Permission denied'
           });
         }
       });
   },
 
-  listAllDocuments(req, res) {
+  listAllDocuments(request, response) {
     const docAttributes = {
       doc: ['id', 'title', 'content', 'access',
         'userId', 'createdAt', 'updatedAt'],
-      user: ['id', 'username']
+      user: ['id', 'userName']
     };
     let query;
-    if (req.decodedToken.roleId === 1) {
+    if (request.decodedToken.roleId === 1) {
       query = { where: {} };
     } else {
       query = {
         where: {
-          $or: [
-            { access: 'public' },
-            { userId: req.decodedToken.userId },
-            {
-              $and: [
-                { access: 'role' },
-                { userRoleId: req.decodedToken.roleId }
-              ]
-            }
-          ]
-        },
+          access: 'public'
+        }
       };
     }
-    query = { attributes: docAttributes.doc };
-    query.limit = req.query.limit || null;
-    query.offset = req.query.offset || null;
+    query.attributes = docAttributes.doc;
+    query.limit = request.query.limit || null;
+    query.offset = request.query.offset || null;
     query.order = [['createdAt', 'DESC']];
-
     db.documents
-      .findAll(query)
+      .findAll({
+        where: query.where,
+        order: query.order,
+        limit: query.limit,
+        offset: query.offset
+      })
       .then((docs) => {
-        res.status(200).send({ message: docs });
+        if (request.decodedToken.roleId === 1) {
+          response.status(200).send({
+            message:
+            'Showing all documents',
+            data: docs
+          });
+        } else {
+          response.status(200).send({
+            message:
+            'Showing all public documents',
+            data: docs
+          });
+        }
       });
   },
 
-  getSpecificDocument(req, res) {
+  getSpecificDocument(request, response) {
     db.documents
-      .findById(req.params.id)
+      .findById(request.params.id)
       .then((doc) => {
         if (!doc) {
-          return res.status(404).send({
+          return response.status(404).send({
             message:
-            'The document was not found'
+            `Document with the id: ${request.params.id} does not exist`
           });
         }
         if (doc.access === 'public' || doc.userId ===
-          req.decodedToken.userId) {
-          return res.status(200).send({
+          request.decodedToken.userId) {
+          return response.status(200).send({
             message:
             'Document found!',
             data: doc
           });
         }
         if (doc.access === 'role' && doc.userRoleId ===
-          req.decodedToken.roleId) {
-          return res.status(200).send({
+          request.decodedToken.roleId) {
+          return response.status(200).send({
             message:
             'Document found!',
             data: doc
           });
         }
-        res.status(401).send({ message: 'Permission denied' });
+        response.status(401).send({ message: 'Permission denied' });
       });
   },
 
-  searchDocument(req, res) {
-    if (!req.query.query) {
-      return res.send({ message: 'Search cannot be empty' });
+  searchDocument(request, response) {
+    const searchTerm = request.query.q;
+    if (!Object.keys(request.query).length || !searchTerm) {
+      return response.status(400).send({ message: 'Unallowed search format' });
     }
     const query = {
       where: {
-        $and: [
-          {
-            $or: [
-              { access: 'public' },
-              { ownerId: req.decodedToken.userId },
-              {
-                $and: [
-                  { access: 'role' },
-                  { ownerRoleId: req.decodedToken.roleId }
-                ]
-              }
-            ]
-          },
-          {
-            $or: [
-              { title: { like: `%${req.query.query}%` } },
-              { content: { like: `%${req.query.query}%` } }
-            ]
-          }
-        ]
-      },
-      limit: req.query.limit || null,
-      offset: req.query.offset || null,
-      order: [['createdAt', 'DESC']]
+        title: {
+          $iLike: `%${searchTerm}%`
+        }
+      }
     };
     db.documents
       .findAll(query)
       .then((queriedDoc) => {
-        res.status(200).send({ message: queriedDoc });
+        if (queriedDoc.length <= 0) {
+          return response.status(404).send({
+            message: 'No results were found'
+          });
+        }
+        return response.status(200).send({
+          message: 'Search results for all documents',
+          data: queriedDoc
+        });
       });
   }
 };
