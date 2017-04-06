@@ -167,7 +167,7 @@ const UserController = {
               });
             });
         } else {
-          response.status(404).send({
+          response.status(403).send({
             message:
             'Cannot update the information of a user that does not exist'
           });
