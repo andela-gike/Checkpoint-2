@@ -1,7 +1,5 @@
 import Bcrypt from 'bcrypt-nodejs';
 
-const salt = Bcrypt.genSaltSync(10);
-
 module.exports = (sequelize, DataTypes) => {
   const users = sequelize.define('users', {
     firstName: {
@@ -21,12 +19,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
-      validate: {
-        len: {
-          args: 3,
-          message: 'Your username should be atleast 3 characters long'
-        }
-      }
     },
     password: {
       type: DataTypes.STRING,
@@ -39,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     roleId: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 2
     }
@@ -53,9 +45,10 @@ module.exports = (sequelize, DataTypes) => {
         });
       }
     },
+    freezeTableName: true,
     instanceMethods: {
       generateHashedPassword() {
-        this.password = Bcrypt.hashSync(this.password, salt);
+        this.password = Bcrypt.hashSync(this.password, Bcrypt.genSaltSync(9));
       },
       validatePassword(password) {
         return Bcrypt.compareSync(password, this.password);

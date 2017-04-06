@@ -60,19 +60,19 @@ export function deleteCurrentDocument() {
   };
 }
 
-// /**
-//  * @export
-//  * @returns {object} documents
-//  */
-// export function loadUserDocuments() {
-//   return (dispatch, getState) => {
-//     return axios.get(
-//       `user/${getState().auth.user.data.id}/document`)
-//       .then((response) => {
-//         dispatch(loadDocumentSuccess(response.data));
-//       });
-//   };
-// }
+/**
+ * @export
+ * @returns {object} documents
+ */
+export function loadUserDocuments() {
+  return (dispatch, getState) => {
+    return axios.get(
+      `user/${getState().auth.user.data.id}/document`)
+      .then((response) => {
+        dispatch(loadDocumentSuccess(response.data));
+      });
+  };
+}
 
 /**
  * @export
@@ -94,16 +94,16 @@ export function loadAllDocuments() {
  * @param {any} document
  * @returns {object} documents
  */
-// export function saveDocument(document) {
-//   return (dispatch) => {
-//     return axios.post('/api/documents', document)
-//       .then(() => {
-//         dispatch(loadUserDocuments());
-//       }).catch((error) => {
-//         throw (error);
-//       });
-//   };
-// }
+export function saveDocument(document) {
+  return (dispatch) => {
+    return axios.post('/api/documents', document)
+      .then(() => {
+        dispatch(loadUserDocuments());
+      }).catch((error) => {
+        throw (error);
+      });
+  };
+}
 
 /**
  * @export

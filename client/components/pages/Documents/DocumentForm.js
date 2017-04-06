@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-// import TinyMCE from 'react-tinymce';
 import TextInput from '../../common/TextFields';
 import CKEditor from './CKEditor';
 
@@ -13,7 +12,7 @@ const DocumentForm = ({ document, onChange, onSave, errors }) => (
           <TextInput
             name="title"
             label="Title"
-          // defaultvalue={document.title}
+            // defaultvalue={document.title}
             onChange={onChange}
             error={errors}
           />
@@ -23,16 +22,13 @@ const DocumentForm = ({ document, onChange, onSave, errors }) => (
           <TextInput
             name="access"
             label="Access"
-          // defaultvalue={document.access}
+            // defaultvalue={document.access}
             onChange={onChange}
             error={errors}
           />
         </div>
       </div>
-      <CKEditor
-    // value={this.props.value}
-        onChange={onChange}
-      />
+
     </center>
   </form>
 );

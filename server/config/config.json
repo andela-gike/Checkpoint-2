@@ -2,7 +2,7 @@
   "development": {
     "username": "postgres",
     "password": null,
-    "database": "docman-dev",
+    "database": "docmandev",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
@@ -14,10 +14,6 @@
     "dialect": "postgres"
   },
   "production": {
-    "username": "snlxhrqvmtwnda",
-    "password": "b3f36da38d75b358a7e43cd21b50108c9f945bd5a7c76a13a92d580f7cd85e4c",
-    "database": "d580ainq8s2kpp",
-    "host": "//:@ec2-23-21-220-188.compute-1.amazonaws.com",
-    "dialect": "postgres"
+    "use_env_variable": "DATABASE_URL"
   }
 }

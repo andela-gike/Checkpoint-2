@@ -8,9 +8,11 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     classMethods: {
       associate: (models) => {
-        roles.hasMany(models.users, { foreignKey: 'roleId' });
+        roles.hasMany(models.users, {
+          onDelete: 'CASCADE', foreignKey: 'roleId' });
       }
-    }
+    },
+    freezeTableName: true
   });
   return roles;
 };
