@@ -2,3 +2,5 @@ node_modules/
 .DS_STORE
 .env
 coverage/
+bundle.js
+bundle.js.map

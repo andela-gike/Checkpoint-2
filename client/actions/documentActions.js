@@ -1,4 +1,3 @@
-
 import request from 'superagent';
 import fetch from 'isomorphic-fetch';
 import * as types from './actionTypes';
@@ -79,12 +78,12 @@ export const fetchDocuments = (offset) => {
   const token = localStorage.getItem('dms-user');
   return (dispatch) => {
     request
-  .get(`/api/documents?offset=${pageOffset}`)
-  .set({ 'x-access-token': token })
-  .end((err, res) => {
-    Materialize.toast(res.body.message, 4000, 'rounded');
-    dispatch(getDocumentSuccess(res.body));
-  });
+      .get(`/api/documents?offset=${pageOffset}`)
+      .set({ 'x-access-token': token })
+      .end((err, res) => {
+        Materialize.toast(res.body.message, 4000, 'rounded');
+        dispatch(getDocumentSuccess(res.body));
+      });
   };
 };
 
@@ -139,8 +138,8 @@ export const deleteDocument = (id) => {
     if (err) {
       return err;
     }
-    dispatch(deleteDocumentSuccess(res.body.document));
     window.location = '/documents';
+    dispatch(deleteDocumentSuccess(res.body.document));
   });
   };
 };
