@@ -1,141 +1,146 @@
-import axios from 'axios';
+
+import request from 'superagent';
+import fetch from 'isomorphic-fetch';
 import * as types from './actionTypes';
 
-/**
- * @export
- * @param {any} document
- * @returns {any} document
- */
-export function loadDocumentSuccess(document) {
-  return {
-    type: types.LOAD_DOCUMENT_SUCCESS,
-    document
-  };
-}
 
-/**
- * @export
- * @param {any} document
- * @returns {any} document
- */
-export function createDocumentSuccess(document) {
-  return {
-    type: types.CREATE_DOCUMENT_SUCCESS,
-    document
-  };
-}
+export const createDocument = document => ({
+  type: types.CREATE_DOCUMENT,
+  document
+});
 
-/**
- * @export
- * @param {any} document
- * @returns {any} document
- */
-export function updateDocumentSuccess(document) {
-  return {
-    type: types.UPDATE_DOCUMENT_SUCCESS,
-    document
-  };
-}
+// action creators
+export const getDocumentSuccess = documents => ({
+  type: types.LOAD_DOCUMENT_SUCCESS,
+  documents
+});
 
-/**
- * set the chosen document in state
- * @export
- * @param {any} id
- * @returns {any} document id
- */
-export function chooseAsCurrentDocument(id) {
-  return {
-    type: types.CHOOSE_AS_CURRENT_DOCUMENT,
-    id
-  };
-}
+export const updateDocumentSuccess = document => ({
+  type: types.UPDATE_DOCUMENT_SUCCESS,
+  document
+});
 
-/**
- * delete from state the current selected document
- * @return {[type]} [description]
- */
-export function deleteCurrentDocument() {
-  return {
-    type: types.DELETE_CURRENT_DOCUMENT,
-  };
-}
+export const createDocumentSuccess = document => ({
+  type: types.CREATE_DOCUMENT_SUCCESS,
+  document
+});
 
-/**
- * @export
- * @returns {object} documents
- */
-export function loadUserDocuments() {
-  return (dispatch, getState) => {
-    return axios.get(
-      `user/${getState().auth.user.data.id}/document`)
-      .then((response) => {
-        dispatch(loadDocumentSuccess(response.data));
-      });
-  };
-}
+export const deleteDocumentSuccess = document => ({
+  type: types.DELETE_DOCUMENT_SUCCESS,
+  document
+});
 
-// /**
-//  * @export
-//  * @returns {object} documents
-//  */
-// export function loadAllDocuments() {
-//   return (dispatch) => {
-//     return axios.get('/api/documents')
-//       .then((response) => {
-//         dispatch(loadDocumentSuccess(response.data));
-//       }).catch((error) => {
-//         throw (error);
-//       });
-//   };
-// }
+// // get roles
+// export const documentApi = () => {
+//   const token = localStorage.getItem('dms-user');
+//   return fetch('/api/documents', {
+//     method: 'GET',
+//     headers: {
+//       'x-access-token': token
+//     }
+//   }).then((response) => {
+//     if (response.status >= 400) {
+//       throw new Error('Bad response from server');
+//     }
+//     return response.json();
+//   })
+//     .then(documents => documents)
+//     .catch((error) => {
+//       throw error;
+//     });
+// };
 
-/**
- * @export
- * @param {any} document
- * @returns {object} documents
- */
-export function saveDocument(document) {
-  // const token = localStorage.getItem('jwtToken');
+export const fetchADocument = (documentId) => {
+  const token = localStorage.getItem('dms-user');
+  return fetch(`/api/roles/${documentId}`, {
+    method: 'GET',
+    headers: {
+      Authorization: token
+    }
+  })
+    .then((response) => {
+      if (response.status >= 400) {
+        Materialize.toast(`Bad response from server, ${res.body.message}`, 4000, 'rounded');
+        throw new Error('Bad response from server');
+      } else {
+        Materialize.toast(`Document Successfully retrieved, ${res.body.message}`, 4000, 'rounded');
+      }
+      return response.json();
+    })
+    .then(document => document)
+    .catch((error) => {
+      throw error;
+    });
+};
+
+// thunk
+export const fetchDocuments = (offset) => {
+  const pageOffset = offset || 0;
+  const token = localStorage.getItem('dms-user');
   return (dispatch) => {
-    return axios.post('/api/documents', document)
-    // .set({ 'x-access-token': token })
-      .then(() => {
-        dispatch(loadUserDocuments());
-      }).catch((error) => {
-        throw (error);
-      });
+    request
+  .get(`/api/documents?offset=${pageOffset}`)
+  .set({ 'x-access-token': token })
+  .end((err, res) => {
+    Materialize.toast(res.body.message, 4000, 'rounded');
+    dispatch(getDocumentSuccess(res.body));
+  });
   };
-}
+};
 
-/**
- * @export
- * @param {any} document
- * @returns {object} documents
- */
-export function updateDocument(document) {
-  return (dispatch, getState) => {
-    const documentId = getState().handleDocuments.chosenDocument;
-    return axios.put(`/api/documents/${documentId}`, document)
-      .then(() => {
-        dispatch(loadUserDocuments());
-      }).catch((error) => {
-        throw (error);
-      });
-  };
-}
-
-/**
- * @export
- * @param {any} id
- * @returns {object} documents
- */
-export function deleteDocument(id) {
+export const documentSaver = (document) => {
+  const token = localStorage.getItem('dms-user');
   return (dispatch) => {
-    return axios.delete(`/api/documents/${id}`)
-      .then(() => {
-        dispatch(loadUserDocuments());
-      }).catch((error) => {
-        throw (error);
-      });
+    request
+  .post('/api/documents')
+  .send(document)
+  .set({ 'x-access-token': token })
+  .end((err, res) => {
+    Materialize.toast(res.body.message, 4000, 'rounded');
+    if (err) {
+      return err;
+    }
+    dispatch(createDocumentSuccess(res.body.document));
+    window.location = '/documents';
+  });
   };
-}
+};
+
+
+export const updateDocument = (document) => {
+  const token = localStorage.getItem('dms-user');
+  return (dispatch) => {
+    request
+  .put(`/api/documents/${document.id}`)
+  .send(document)
+  .set({ 'x-access-token': token })
+  .end((err, res) => {
+    Materialize.toast(res.body.message, 4000, 'rounded');
+    if (err) {
+      return err;
+    }
+    window.location = '/documents';
+    dispatch(updateDocumentSuccess(res.body.updatedDocument));
+  });
+  };
+};
+
+
+
+export const deleteDocument = (id) => {
+  const token = localStorage.getItem('dms-user');
+  return (dispatch) => {
+    request
+  .delete(`/api/documents/${id}`)
+  .send(document)
+  .set({ 'x-access-token': token })
+  .end((err, res) => {
+    Materialize.toast(res.body.message, 4000, 'rounded');
+    if (err) {
+      return err;
+    }
+    dispatch(deleteDocumentSuccess(res.body.document));
+    window.location = '/documents';
+  });
+  };
+};

@@ -1,25 +1,38 @@
 import React from 'react';
-import { Route, IndexRoute } from 'react-router';
-import App from './components/App';
-import HomePage from './components/pages/Landingpage/Homepage';
-import AboutPage from './components/pages/Landingpage/Aboutpage';
-import LoginPage from './components/pages/Authentication/login/loginpage';
-import SignUpPage from './components/pages/Authentication/signup/signupPage';
-// import Dashboard from './components/pages/Dashboard/Dashboard';
-import DocumentPage from './components/pages/Documents/DocumentPage';
-// import DocumentDisplayer from './components/pages/Documents/DocumentDisplayer';
-import DocumentEditor from './components/pages/Documents/DocumentEditor';
-import requireAuth from './utils/requireAuth';
+import { Route, IndexRoute , match } from 'react-router';
+import App from './containers/App';
+import LandingPage from './components/pages/LandingPages/LandingPage';
+import Header from './components/Header';
+import Login from './components/pages/Authentication/Login';
+import Register from './components/pages/Authentication/SignUp';
+import RolePage from './containers/RolePage';
+import ManageRolePage from './containers/ManageRolePage';
+import UserPage from './containers/UserPage';
+import ManageUserPage from './containers/ManageUserPage';
+import DocumentContainer from '../client/containers/DocumentContainer';
+import DocumentPage from '../client/containers/DocumentPage';
 
+const logUserOut = (nextState, replace, done) => {
+  localStorage.removeItem('dms-user');
+  window.location = '/';
+};
 
 export default (
-    <Route path="/" component={App}>
-      <IndexRoute component={HomePage} />
-      <Route path="signup" component={SignUpPage} />
-      <Route path="about" component={AboutPage} />
-      <Route path="login" component={LoginPage} />
-      <Route path="documents" component={requireAuth(DocumentPage)} />
-      <Route path="createdocuments" component={DocumentEditor} />
-    </Route>
+  <Route path="/" component={App}>
+    <IndexRoute component={LandingPage} />
+    <Route path="signup" component={Register}/>
+    <Route path="login" component={Login}/>
+    <Route path="roles" component={RolePage} />
+    <Route path="createdoc" component={DocumentContainer} />
+    <Route path="role" component={ManageRolePage} />
+    <Route path="role/:id" component={ManageRolePage} />
+    <Route path="register" component={UserPage} />
+    <Route path="signups" component={ManageUserPage} />
+    <Route path="user" component={ManageUserPage} />
+    <Route path="logout" onEnter={logUserOut} />
+    <Route path="documents" component={DocumentPage} />
+    <Route path="documents/:id" component={DocumentContainer} />
+  </Route>
 );
+
 
