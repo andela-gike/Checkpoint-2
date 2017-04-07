@@ -9,9 +9,9 @@ export const createRole = role => ({
 
 
 // action creators
-export const getRoleSuccess = roles => ({
+export const getRoleSuccess = data => ({
   type: types.LOAD_ROLE_SUCCESS,
-  roles
+  data
 });
 
 export const updateRoleSuccess = role => ({
@@ -50,7 +50,7 @@ export const fetchRoles = () => {
     .set({ 'x-access-token': token })
     .end((err, res) => {
       Materialize.toast(res.body.message, 4000, 'rounded');
-      dispatch(getRoleSuccess(res.body.roles));
+      dispatch(getRoleSuccess(res.body.data));
     });
   };
 };

@@ -43,10 +43,14 @@ class DocumentContainer extends React.Component {
   }
   render() {
     return (
-      <form>
         <div className="container">
+        <br />
+        <br />
+        <br />
           <div>
+          <center>
             <h4>Fill in the provided fields below to Create a new document</h4>
+            </center>
           </div>
           <DocumentForm
             document={this.state.document}
@@ -68,7 +72,6 @@ class DocumentContainer extends React.Component {
         </button>
           </center>
         </div>
-      </form>
     );
   }
 }

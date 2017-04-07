@@ -68,10 +68,9 @@ class DocumentList extends React.Component {
                       <div className="card-action">
                         <Modal
                           header="Edit Document"
+                          fixedFooter
                           trigger={
-                            <i className="small material-icons">mode_edit</i>
-                    }
-                        >
+                            <i className="small material-icons">mode_edit</i>}>
                           <form
                             className="col s12"
                             method="post" onSubmit={e => this.onSubmit(e)}
@@ -132,11 +131,11 @@ class DocumentList extends React.Component {
 
   }
 
-DocumentList.propTypes = {
-  deleteDocument: React.PropTypes.func.isRequired,
-  fetchDocuments: React.PropTypes.func.isRequired,
-  updateDocument: React.PropTypes.func.isRequired,
-};
+// DocumentList.propTypes = {
+//   deleteDocument: React.PropTypes.func.isRequired,
+//   fetchDocuments: React.PropTypes.func.isRequired,
+//   updateDocument: React.PropTypes.func.isRequired,
+// };
 const mapDispatchToProps = dispatch => ({
   updateDocument: documentDetails => dispatch(DocumentAction.updateDocument(documentDetails)),
   deleteDocument: id => dispatch(DocumentAction.deleteDocument(id)),
