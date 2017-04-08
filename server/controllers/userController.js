@@ -1,11 +1,12 @@
 import jwt from 'jsonwebtoken';
 import moment from 'moment';
 import db from '../models';
+import validInput from '../validation/signupvalidator';
+
 
 
 const secret = process.env.SECRET || 'Happypeopledontkeepsecret';
 const expires = moment().add(1, 'days').valueOf();
-
 
 const UserController = {
   createNewUser(request, response) {
@@ -18,6 +19,12 @@ const UserController = {
       return response.status(400).send({
         message: 'The paramaters are incomplete',
       });
+    }
+    const { errors, isValid } = validInput(request.body);
+    if (isValid) {
+      response.json({ success: true });
+    } else {
+      response.status(400).json(errors);
     }
     db.users.findOne({ where: { $or: { email, userName } } })
       .then((userExists) => {
