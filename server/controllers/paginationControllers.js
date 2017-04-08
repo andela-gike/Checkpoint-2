@@ -13,7 +13,7 @@ const Pagination = {
     })
       .then(users => res.status(200)
         .send(users));
-  }
+  },
 
   getDocumentsPagination(request, response) {
     request.query.limit = (request.query.limit > 0) ? request.query.limit : 3;
