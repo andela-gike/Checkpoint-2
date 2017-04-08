@@ -22,7 +22,7 @@ const UserController = {
     db.users.findOne({ where: { $or: { email, userName } } })
       .then((userExists) => {
         if (userExists) {
-          return response.status(400).send({
+          return response.status(409).send({
             message: `There is a user already existing
             with this email or userName`
           });
@@ -133,12 +133,12 @@ const UserController = {
     query.offset = request.query.offset || null;
     query.order = [['createdAt', 'DESC']];
     db.users
-      .findAll({ query: query, limit: query.limit, offset: query.offset })
+      .findAll({ query, limit: query.limit, offset: query.offset })
       .then((allUsers) => {
         if (allUsers) {
           response.status(200).send({
             message: 'Listing available users',
-            data: allUsers
+            allUsers
           });
         }
       })
@@ -168,7 +168,12 @@ const UserController = {
             .then((updatedProfile) => {
               response.status(200).send({
                 message: 'User information updated successfully',
-                data: updatedProfile
+                updatedProfile: {
+                  firstName: updatedProfile.firstName,
+                  lastName: updatedProfile.lastName,
+                  email: updatedProfile.email,
+                  userName: updatedProfile.userName
+                }
               });
             });
         } else {

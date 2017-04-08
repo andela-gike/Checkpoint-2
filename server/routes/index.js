@@ -5,6 +5,7 @@ import documentRouter from './documentRoutes';
 import roleRouter from './roleRoutes';
 import userRouter from './userRoutes';
 import searchRouter from './searchRoutes';
+import paginationRouter from './paginationRoutes';
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use('/api/users', userRouter);
 app.use('/api/documents', documentRouter);
 app.use('/api/roles', roleRouter);
 app.use('/api/search', searchRouter);
+app.use('/api/pagination', paginationRouter);
 
 
 export default app;
