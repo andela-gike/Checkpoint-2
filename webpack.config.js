@@ -20,24 +20,16 @@ export default {
     contentBase: './client'
   },
   resolve: {
-    alias: {
-      jquery: path.resolve(__dirname, 'node_modules/jquery/dist/jquery.js')
-    }
+
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery',
-      'window.jQuery': 'jquery',
-      Hammer: 'hammerjs/hammer'
-    }),
     new webpack.LoaderOptionsPlugin({
       debug: true
     }),
     new HtmlWebpackPlugin({
-      template: 'client/public/index.html',
+      template: 'client/index.html',
       inject: 'body',
       filename: 'index.html'
     })
@@ -84,10 +76,7 @@ export default {
         options: {
           limit: 25000,
         }
-      },
-      {
-        test: /materialize-css\/bin\//,
-        loader: 'imports?jQuery=jquery,$=jquery,hammerjs' },
+      }
     ]
   },
   node: {

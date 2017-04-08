@@ -1,5 +1,6 @@
 import React, { propTypes } from 'react';
-import { Modal, Button, Row, Input } from 'react-materialize';
+import { Button } from 'react-materialize';
+
 const RoleListRow = ({ role }) => {
   return(
   <tr>

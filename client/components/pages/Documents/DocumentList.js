@@ -131,11 +131,6 @@ class DocumentList extends React.Component {
 
   }
 
-// DocumentList.propTypes = {
-//   deleteDocument: React.PropTypes.func.isRequired,
-//   fetchDocuments: React.PropTypes.func.isRequired,
-//   updateDocument: React.PropTypes.func.isRequired,
-// };
 const mapDispatchToProps = dispatch => ({
   updateDocument: documentDetails => dispatch(DocumentAction.updateDocument(documentDetails)),
   deleteDocument: id => dispatch(DocumentAction.deleteDocument(id)),

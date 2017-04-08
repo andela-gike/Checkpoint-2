@@ -50,7 +50,7 @@ export const fetchUsers = () => {
   .set({ 'x-access-token': token })
   .end((err, res) => {
     Materialize.toast(res.body.message, 4000, 'rounded');
-    dispatch(getUserSuccess(res.body.users));
+    dispatch(getUserSuccess(res.body.data));
   });
   };
 };
