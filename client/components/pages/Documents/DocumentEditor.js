@@ -6,8 +6,11 @@ const DocumentEditor = ({ document, onChange }) => (
     <TinyMCE
       content={document.content}
       config={{
-        plugins: 'link image code',
-        toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code'
+        plugins: 'link image code | emoticons | pagebreak',
+        toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code | emoticons | pagebreak',
+        code_dialog_height: 200,
+        code_dialog_width: 300,
+        menubar: "insert",
       }}
       onChange={onChange}
     />

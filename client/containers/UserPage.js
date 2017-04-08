@@ -5,6 +5,7 @@ import { browserHistory } from 'react-router';
 import * as userActions from '../actions/userAction';
 import UserList from '../components/pages/users/UserList';
 
+
 class User extends React.Component {
   constructor(props) {
     super(props);
@@ -27,6 +28,12 @@ class User extends React.Component {
         return(
           <div>
           <UserList users={usersInArray}/>
+          <input
+          type="submit"
+          value="Add a new User"
+          className="btn waves-effect waves-light"
+          onClick={this.redirectToRolePage}
+        />
           </div>
         )
       }

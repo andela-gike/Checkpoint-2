@@ -58,19 +58,19 @@ class DocumentList extends React.Component {
             {doc.map(document =>
               <div key={document.id}>
                 <div className="col s3">
-                  <div className="card white darken-1" style={{ height: 300 }}>
-                    <div className="card-content black-text">
+                  <div className="card brown darken-1" style={{ height: 300 }}>
+                    <div className="card-content white-text">
                       <DocumentTitle document={document} />
                       <DocumentContent document={document} />
                     </div>
-                    <div className="card-action">
+                    <div className="card-action ">
                       <a>Published: {moment(document.createdAt).format('MMMM Do YYYY')}</a> <br />
                       <div className="card-action">
                         <Modal
                           header="Edit Document"
                           fixedFooter
                           trigger={
-                            <i className="small material-icons">mode_edit</i>}>
+                            <i className="small material-icons white-text">mode_edit</i>}>
                           <form
                             className="col s12"
                             method="post" onSubmit={e => this.onSubmit(e)}
@@ -114,7 +114,7 @@ class DocumentList extends React.Component {
                         <Button
                           waves="light"
                           onClick={e => this.deleteDoc(document.id)}
-                          className="btn-floating left">
+                          className="btn-floating left red darken-4">
                           <i className="small material-icons">delete</i></Button>
                       </div>
                     </div>

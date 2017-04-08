@@ -28,11 +28,6 @@ export default {
     new webpack.LoaderOptionsPlugin({
       debug: true
     }),
-    new HtmlWebpackPlugin({
-      template: 'client/index.html',
-      inject: 'body',
-      filename: 'index.html'
-    })
   ],
   module: {
     loaders: [
