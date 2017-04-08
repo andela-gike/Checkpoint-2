@@ -5,10 +5,10 @@ import Pagination from '../controllers/paginationControllers';
 const paginationRouter = express.Router();
 
 
-router.route('/users')
+paginationRouter.route('/users')
   .get(Authentication.verifyUser, Authentication.verifyAdmin, Pagination.getUserPagination);
 
-router.route('/documents')
+paginationRouter.route('/documents')
   .get(Authentication.verifyUser, Pagination.getDocumentsPagination);
 
 export default paginationRouter;
