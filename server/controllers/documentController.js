@@ -12,7 +12,7 @@ const DocumentController = {
     db.documents.findOne({ where: { title: request.body.title } })
       .then((documentExists) => {
         if (documentExists) {
-          return response.status(400).send({
+          return response.status(409).send({
             message: 'This document already exists'
           });
         }

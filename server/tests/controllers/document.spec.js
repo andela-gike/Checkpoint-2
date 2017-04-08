@@ -105,6 +105,18 @@ describe('Document API Spec', () => {
           done();
         });
     });
+    it('should ensure that a document with the same title is not created twice', (done) => {
+      request.post('/api/documents')
+        .set('authorization', adminUserToken)
+        .send(docs[2])
+        .expect(409)
+        .end((err, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.message).to
+            .equal('This document already exists');
+          done();
+        });
+    });
   });
 
   describe('making a PUT request to update a document details/content', () => {
