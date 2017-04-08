@@ -9,7 +9,7 @@ import express from 'express';
 
 dotenv.config({ silent: true });
 
-const port = process.env.PORT || 6060;
+const port = process.env.PORT;
 
 app.use(express.static(path.join(__dirname, '/client')))
 
@@ -22,7 +22,7 @@ app.use(require('webpack-dev-middleware')(compiler, {
 
 app.use(require('webpack-hot-middleware')(compiler));
 
-app.get('/*', (req, res) => {
+app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, './client/index.html'));
 });
 
