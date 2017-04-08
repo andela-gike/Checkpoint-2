@@ -14,15 +14,15 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.get('/', (req, res) => {
-  res.status(200).send({ message: 'Welcome to DOCMAN bot!' });
-});
+
+// app.get('/', (req, res) => {
+//   res.status(200).send({ message: 'Welcome to DOCMAN bot!' });
+// });
 
 app.use('/api/users', userRouter);
 app.use('/api/documents', documentRouter);
 app.use('/api/roles', roleRouter);
 app.use('/api/search', searchRouter);
 app.use('/api/pagination', paginationRouter);
-
 
 export default app;

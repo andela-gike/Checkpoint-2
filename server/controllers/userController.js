@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import moment from 'moment';
 import db from '../models';
+// import validInput from '../validation/signupvalidator';
 
 
 const secret = process.env.SECRET || 'Happypeopledontkeepsecret';
@@ -19,6 +20,12 @@ const UserController = {
         message: 'The paramaters are incomplete',
       });
     }
+    // const { errors, isValid } = validInput(request.body);
+    // if (isValid) {
+    //   response.json({ success: true });
+    // } else {
+    //   response.status(400).json(errors);
+    // }
     db.users.findOne({ where: { $or: { email, userName } } })
       .then((userExists) => {
         if (userExists) {
@@ -46,9 +53,9 @@ const UserController = {
               }
             });
           })
-          .catch((err) => {
+          .catch(() => {
             response.status(400).send({
-              message: 'There was a problem creating this user', err
+              message: 'There was a problem creating this user'
             });
           });
       });
@@ -272,7 +279,30 @@ const UserController = {
     response.status(200).send({
       message: 'You were logged out successfully'
     });
+  },
+
+
+  fetchExistingUser(request, response) {
+    db.users
+    .find({
+      where: {
+        $or: [
+            { email: request.params.identifier },
+            { userName: request.params.identifier }
+        ]
+      }
+    })
+    .then((user) => {
+      if (!user) {
+        response.status(200).json({ error: 'User can be created' });
+      }
+      response.status(400).json({ error: 'User already exists' });
+    })
+    .catch(error => response.status(501).json({
+      error, err: 'An error occurred while retrieving the user'
+    }));
   }
+
 };
 
 export default UserController;

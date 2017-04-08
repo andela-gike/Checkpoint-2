@@ -1,10 +1,21 @@
 {
   "root": true,
   "extends": "airbnb",
+  "plugins": [
+    "react"
+  ],
   "env": {
     "node": true,
+    "browser": true,
     "es6": true,
     "mocha": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
   "rules": {
     "one-var": 0,
@@ -13,6 +24,7 @@
     "consistent-return": 0,
     "no-param-reassign": 0,
     "comma-dangle": 0,
+     "import/no-unresolved": 0,
     "curly": ["error", "multi-line"],
     "no-shadow": ["error", { "allow": ["req", "res", "err"] }],
     "valid-jsdoc": ["error", {
