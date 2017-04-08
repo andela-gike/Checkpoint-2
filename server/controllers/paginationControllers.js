@@ -4,13 +4,6 @@ import db from '../models';
  * Handles pagination
  */
 const Pagination = {
-  /**
-   * Gets all users with pagination
-   *
-   * @param {Object} request Object containing the request
-   * @param {Object} response Object containing the response
-   * @returns {Object} res object
-   */
   getUserPagination(request, response) {
     request.query.limit = (request.query.limit > 0) ? request.query.limit : 3;
     request.query.offset = (request.query.offset > 0) ? request.query.offset : 0;
@@ -22,13 +15,6 @@ const Pagination = {
         .send(users));
   }
 
-  /**
-   * Gets all documents with pagination
-   *
-   * @param {Object} request Object containing the request
-   * @param {Object} response Object containing the response
-   * @returns {Object} res object
-   */
   getDocumentsPagination(request, response) {
     request.query.limit = (request.query.limit > 0) ? request.query.limit : 3;
     request.query.offset = (request.query.offset > 0) ? request.query.offset : 0;
