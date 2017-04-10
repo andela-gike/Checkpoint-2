@@ -37,6 +37,7 @@ export function retrieveUsers() {
   return dispatch => axios.get('/api/users')
     .then((response) => {
       dispatch(retrieveUsersSuccess(response.data.usersFound));
+      console.log('<<<<<<<<', response.data.usersFound);
     }).catch((error) => {
       throw (error);
     });
@@ -78,6 +79,7 @@ export function updateUserInfo(userInfo) {
     .then((response) => {
       console.log(response, 'response');
       dispatch(updateUserSuccess(userInfo));
+      console.log(userInfo);
     }).catch((error) => {
       throw error;
     });
@@ -88,6 +90,7 @@ export function getUserInfo() {
   return dispatch => axios.get(`/api/users/${user.userId}`)
     .then((response) => {
       dispatch(getUserInfoSuccess(response.data));
+      console.log(response.data);
     }).catch((error) => {
       throw error;
     });

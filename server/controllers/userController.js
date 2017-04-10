@@ -31,8 +31,9 @@ const UserController = {
           .create(request.body)
           .then((user) => {
             const payload = {
-              userId: user.id,
-              roleId: user.roleId
+              id: user.id,
+              userName: user.userName,
+              userRoleId: user.roleId
             };
             const token = jwt.sign(payload, secret, { expiresIn: expires });
             return response.status(201).send({
