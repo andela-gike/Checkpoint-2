@@ -37,7 +37,6 @@ export function retrieveUsers() {
   return dispatch => axios.get('/api/users')
     .then((response) => {
       dispatch(retrieveUsersSuccess(response.data.usersFound));
-      console.log('<<<<<<<<', response.data.usersFound);
     }).catch((error) => {
       throw (error);
     });

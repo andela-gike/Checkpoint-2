@@ -27,7 +27,6 @@ export function userSignupRequest(userData) {
     const token = response.data.token;
     const user = response.data.user;
     localStorage.setItem('user', JSON.stringify(user));
-    console.log('>>>>>>>>', user);
     localStorage.setItem('jwtToken', token);
     setAuthorizationToken(token);
     dispatch(setCurrentUser(jwtDecode(token)));

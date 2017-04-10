@@ -75,13 +75,20 @@ const UserController = {
         }
         if (user && user.validatePassword(request.body.password)) {
           const payload = {
-            userId: user.id,
-            roleId: user.roleId
+            id: user.id,
+            userName: user.userName,
+            userRoleId: user.roleId
           };
           const token = jwt.sign(payload, secret, { expiresIn: expires });
           response.status(200).send({
             message: 'You are successfully logged in',
             token,
+            user: {
+              id: user.id,
+              userName: user.userName,
+              userRoleId: user.roleId,
+              email: user.email
+            },
             expiresIn: expires
           });
         } else {

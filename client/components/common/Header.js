@@ -83,7 +83,8 @@ Header.propTypes = {
  */
 export const mapStateToProps = (state) => {
   const { auth: { isAuthenticated, user } } = state;
-  const isAdmin = isAuthenticated && user.userRoleId === 1;
+  const isAdmin = isAuthenticated && user.userRoleId === '1';
+  //disclaimer : this is a very bad fix
   return {
     isAuthenticated,
     user,
