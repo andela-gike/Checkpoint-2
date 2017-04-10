@@ -168,6 +168,20 @@ const DocumentController = {
       });
   },
 
+  findUserDocuments: (request, response) => {
+    db.documents.findAll({ where: { userId: request.params.id } })
+      .then((foundDocuments) => {
+        if (!foundDocuments) {
+          return response.status(404)
+            .send({
+              message: 'No Document(s) found for user with this ID'
+            });
+        }
+        return response.status(200)
+          .send({ message: 'Documents Found', foundDocuments });
+      });
+  },
+
   searchDocument(request, response) {
     const searchTerm = request.query.q;
     if (!Object.keys(request.query).length || !searchTerm) {
