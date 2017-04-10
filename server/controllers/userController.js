@@ -31,7 +31,7 @@ const UserController = {
           .create(request.body)
           .then((user) => {
             const payload = {
-              id: user.id,
+              userId: user.id,
               userName: user.userName,
               userRoleId: user.roleId
             };
@@ -40,7 +40,7 @@ const UserController = {
               message: 'User was successfully created',
               token,
               user: {
-                id: user.id,
+                userId: user.id,
                 userName: user.userName,
                 userRoleId: user.roleId,
                 email: user.email
@@ -75,7 +75,7 @@ const UserController = {
         }
         if (user && user.validatePassword(request.body.password)) {
           const payload = {
-            id: user.id,
+            userId: user.id,
             userName: user.userName,
             userRoleId: user.roleId
           };
@@ -84,7 +84,7 @@ const UserController = {
             message: 'You are successfully logged in',
             token,
             user: {
-              id: user.id,
+              userId: user.id,
               userName: user.userName,
               userRoleId: user.roleId,
               email: user.email
@@ -108,7 +108,7 @@ const UserController = {
 
   findUserById(request, response) {
     db.users
-      .findById(request.params.id)
+      .findById(request.params.userId)
       .then((user) => {
         if (user) {
           user.password = null;
@@ -160,7 +160,7 @@ const UserController = {
 
   updateUser(request, response) {
     db.users
-      .findById(request.params.id)
+      .findById(request.params.userId)
       .then((user) => {
         if (user) {
           if (String(request.decodedToken.userId) !== String(request.params.id)) {

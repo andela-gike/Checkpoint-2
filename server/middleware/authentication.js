@@ -25,7 +25,7 @@ const Authentication = {
 
   verifyAdmin(request, response, next) {
     db.roles
-      .findById(request.decodedToken.roleId)
+      .findById(request.decodedToken.userRoleId)
       .then((role) => {
         if (role.title === 'admin' || role.id === 1) {
           next();
