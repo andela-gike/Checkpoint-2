@@ -6,7 +6,7 @@ import compression from 'compression';
 import app from './server/routes/index';
 import config from './webpack.config.dev';
 
-const port = parseInt(process.env.PORT, 10) || 6060;
+const port = parseInt(process.env.PORT, 10);
 
 /* eslint-disable no-console */
 const env = (process.env.NODE_ENV || 'development') === 'development';
