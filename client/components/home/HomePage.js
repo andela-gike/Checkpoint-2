@@ -7,7 +7,7 @@ const theStyle = {
   overflow: 'hidden',
   backgroundSize: 'cover',
   height: 1000,
-  width: 1300
+  width: 1500
 };
 class HomePage extends React.Component {
   render() {

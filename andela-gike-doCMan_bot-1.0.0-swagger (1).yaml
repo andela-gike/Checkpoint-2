@@ -1,0 +1,291 @@
+# this is an example of the Document management system API
+# as a demonstration of an API spec in YAML
+swagger: '2.0'
+info:
+  title: DocManSyst API
+  description: A simple document management system for proper document management 
+  version: "1.0.0"
+# the domain of the service
+# host: docman-bot-gike.herokuapp.com
+# array of all schemes that your API supports
+schemes:
+  - https
+# will be prefixed to all paths
+# basePath: /
+produces:
+  - application/json
+paths:
+  /documents:
+    get:
+      summary: List all public documents
+      description: |
+        The document endpoint returns info of the documents created and in the database. The response includes the display title
+        and contents of each document, and lists the documents in the
+        proper display order.
+      parameters:
+        - name: title
+          in: query
+          description: The title of the documents.
+          required: true
+          type: string
+          format: double
+        - name: content
+          in: query
+          description: The content of the documents.
+          required: true
+          type: string
+          format: double
+      tags:
+        - Documents
+      responses:
+        200:
+          description: An array of documents
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Documents'
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Error'
+        409:
+          description: Conflict
+          schema:
+            $ref: '#/definitions/Error'
+  /users:
+    get:
+      summary: Listing available users
+      description: This provides the list of all available users in the database to the admin to view the status of users present in the database.
+      parameters:
+        - name: firstName
+          in: query
+          description: The first name of each user.
+          required: true
+          type: string
+          format: double
+        - name: lastName
+          in: query
+          description: The last name of each user.
+          required: true
+          type: string
+          format: double
+        - name: email
+          in: query
+          description: The email of each user.
+          required: true
+          type: string
+          format: double
+        - name: userName
+          in: query
+          description: The user name of each user.
+          required: true
+          type: string
+          format: double
+        - name: roleId
+          in: query
+          description: The role id of each users.
+          required: true
+          type: number
+          format: double
+        - name: createdAt
+          in: query
+          description: The time the user was created.
+          required: true
+          type: number
+          format: double
+        - name: updatedAt
+          in: query
+          description: The time the user was updated.
+          required: true
+          type: number
+          format: double
+      tags:
+        - Users
+      responses:
+        200:
+          description: An array of avaliable users
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Users'
+        403:
+          description: forbidden
+          schema:
+            $ref: '#/definitions/Error'
+        
+  /roles:
+    get:
+      summary: Get the list of roles.
+      description: The list of role in the database is made available to the admin to view the number of role present in his database
+      parameters:
+        - name: title
+          in: query
+          description: The title of the role being created.
+          required: true
+          type: string
+          format: double
+        - name: createdAt
+          in: query
+          description: The time the role was created.
+          required: true
+          type: number
+          format: double
+        - name: updatedAt
+          in: query
+          description: The time the role was updated.
+          required: true
+          type: number
+          format: double
+      tags:
+        - Roles
+      responses:
+        200:
+          description: An array of roles
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Roles'
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Error'
+  /users/3:
+    put:
+      summary: Update user profile
+      description: The update users profile give a user the ability to update their profile as the see fit
+      tags:
+        - Users
+      responses:
+        200:
+          description: User information updated successfully
+          schema:
+            $ref: '#/definitions/Users'
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Error'
+  /api/users:
+    post:
+      summary: A user can register their self
+      description: A user can register their with all the neccesary credentials
+      parameters:
+        - name: firstName
+          in: body
+          type: string
+          format: double
+          description: The first name of a new user
+        - name: lastName
+          in: body
+          type: string
+          format: double
+          description: The last name of a new user
+        - name: email
+          in: body
+          type: string
+          format: double
+          description: The email address of a new user
+        - name: userName
+          in: body
+          type: string
+          format: double
+          description: The user name of a new user
+        - name: password
+          in: body
+          type: string
+          format: double
+          description: The password of a new user
+      tags:
+        - Users
+      responses:
+        201:
+          description: User created successfully
+          schema:
+            $ref: '#/definitions/Users'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /users/1:
+    delete:
+      summary: Admin can delete a user
+      description: An admin can make a request to delete a user from the database
+      tags:
+        - Users
+      responses:
+        200:
+          description: The users is deleted by the admin successfully
+          schema:
+            $ref: '#/definitions/Users'
+        403:
+          description: forbidden
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  Documents:
+    type: object
+    properties:
+      documents_id:
+        type: string
+        description: Unique identifier representing a specific document.
+      title:
+        type: string
+        description: Display name of documents.
+      content:
+        type: string
+        description: The text content of each document that is created.
+      createdAt:
+        type: number
+        description: The date the user was created.
+      updatedAt:
+        type: number
+        description: The date the user was updated.
+  Users:
+    type: object
+    properties:
+      userId:
+        type: string
+        description: Unique identifier representing a specific user.
+      firstName:
+        type: string
+        description: The first of the user.
+      lastName:
+        type: string
+        description: The last name of the user.
+      email:
+        type: string
+        description: The email address of the user.
+      createdAt:
+        type: number
+        description: The date the user was created.
+      updatedAt:
+        type: number
+        description: The date the user was updated.
+  Roles:
+    type: object
+    properties:
+      id:
+        type: number
+        description: Unique identifier representing a specific rol.
+      title:
+        type: string
+        description: The title of each role.
+      createdAt:
+        type: number
+        description: The date the user was created.
+      updatedAt:
+        type: number
+        description: The date the user was updated.
+  
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /andela-gike/doCMan_bot/1.0.0

@@ -156,7 +156,7 @@ const UserController = {
       .then((user) => {
         if (user) {
           if (String(request.decodedToken.userId) !== String(request.params.id)) {
-            return response.send({ message: 'Request not allowed' });
+            return response.status(405).send({ message: 'Request not allowed' });
           }
           user.update({
             firstName: request.body.firstName || user.firstName,
