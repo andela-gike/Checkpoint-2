@@ -94,6 +94,21 @@ const DocumentController = {
       });
   },
 
+  findUserDocuments(request, response) {
+    db.documents.findAll({ where: { userId: request.params.id } })
+      .then((foundDocuments) => {
+        if (!foundDocuments) {
+          return response.status(404)
+            .send({
+              message: `No Document(s) found for user with ID
+              ${request.params.id}`
+            });
+        }
+        return response.status(200)
+          .send(foundDocuments);
+      });
+  },
+
   listAllDocuments(request, response) {
     const docAttributes = {
       doc: ['id', 'title', 'content', 'access',

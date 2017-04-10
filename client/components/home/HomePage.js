@@ -22,8 +22,8 @@ class HomePage extends React.Component {
 
           <Link
             to="about"
-            className="btn waves-effect waves-light blue-grey"
-          >Learn More</Link>
+            className="btn waves-effect waves-light brown"
+          >About the app</Link>
         </center>
       </div>
     );

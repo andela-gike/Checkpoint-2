@@ -1,6 +1,8 @@
 import express from 'express';
 import UserController from '../controllers/userController';
 import Authentication from '../middleware/authentication';
+import DocumentController from '../controllers/documentController';
+
 
 const userRouter = express.Router();
 
@@ -21,5 +23,9 @@ userRouter.route('/:id')
 
 userRouter.route('/:id/documents')
   .get(Authentication.verifyUser, UserController.listUserDocuments);
+
+userRouter.route('/:id/document')
+  .get(Authentication.verifyUser, DocumentController.findUserDocuments);
+
 
 export default userRouter;

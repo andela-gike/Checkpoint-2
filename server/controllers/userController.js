@@ -272,7 +272,23 @@ const UserController = {
     response.status(200).send({
       message: 'You were logged out successfully'
     });
-  }
+  },
+  fetchExistingUser: (request, response) =>
+    db.users
+      .find({
+        where: {
+          $or: [
+            { email: request.params.identifier },
+            { userName: request.params.identifier }
+          ]
+        }
+      })
+      .then((user) => {
+        if (!user) {
+          return response.status(200).json({ message: 'User can be created' });
+        }
+        return response.status(409).json({ error: 'User already exists' });
+      })
 };
 
 export default UserController;
