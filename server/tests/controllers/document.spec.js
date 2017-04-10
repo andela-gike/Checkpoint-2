@@ -221,6 +221,16 @@ describe('Document API Spec', () => {
           done();
         });
     });
+    it('Should return a user document when a user needs is', (done) => {
+      request.get('/api/documents/users/3')
+        .set('authorization', adminUserToken)
+        .expect(200)
+        .end((err, response) => {
+          expect(Array.isArray(response.body)).to.be.true;
+          expect(response.body.length).to.be.greaterThan(0);
+          done();
+        });
+    });
     it('should allow a regular user access to a public document', (done) => {
       request.get('/api/documents/1')
         .set('authorization', regularUserToken)

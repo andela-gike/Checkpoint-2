@@ -18,7 +18,7 @@ export function loadRoleSuccess(roles) {
  * @return {object}
  */
 export function loadRoles() {
-  return dispatch => axios.get('/role')
+  return dispatch => axios.get('/api/roles')
     .then((response) => {
       dispatch(loadRoleSuccess(response.data)
       );
@@ -33,7 +33,7 @@ export function loadRoles() {
  * @return {object}
  */
 export function saveRole(role) {
-  return dispatch => axios.post('/role', role)
+  return dispatch => axios.post('/api/roles', role)
     .then(() => {
       dispatch(loadRoles());
     }).catch((error) => {
@@ -46,7 +46,7 @@ export function saveRole(role) {
  * @return {function}
  */
 export function updateRole(role) {
-  return dispatch => axios.put(`/role/${role.id}`, role)
+  return dispatch => axios.put(`/api/roles/${role.id}`, role)
     .then(() => {
       dispatch(loadRoles());
     }).catch((error) => {
@@ -60,7 +60,7 @@ export function updateRole(role) {
  * @return {object}
  */
 export function deleteRole(id) {
-  return dispatch => axios.delete(`/role/${id}`)
+  return dispatch => axios.delete(`/api/roles/${id}`)
     .then(() => {
       dispatch(loadRoles());
     }).catch((error) => {

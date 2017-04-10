@@ -46,8 +46,8 @@ export class Header extends React.Component {
     }
     return (
       <ul>
-        <li><Link to="/signup" activeClassName="active" className="white-text">Signup</Link></li>
-        <li><Link to="/login" activeClassName="active" className="white-text">Login</Link></li>
+        <li><Link to="/signup" activeClassName="active">Signup</Link></li>
+        <li><Link to="/login" activeClassName="active">Login</Link></li>
       </ul>
     );
   }
@@ -58,7 +58,7 @@ export class Header extends React.Component {
       <nav className="brown darken-4">
         <div className="nav-wrapper">
           <IndexLink to="/" activeClassName="active" className="white-text">
-            <i className="material-icons left white-text">home</i>Home</IndexLink>
+            <i className="material-icons left white-text" >home</i>Home</IndexLink>
           <ul id="nav-mobile" className="right">
             <li>
               {navLinks}

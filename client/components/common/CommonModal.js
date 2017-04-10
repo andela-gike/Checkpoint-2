@@ -17,7 +17,7 @@ class CommonModal extends React.Component {
         <div id="docDisplayModal" className="modal">
           <div>
             <a href="#"
-              className="btn-floating btn-flat blue-grey closeModal modal-close">
+              className="btn-floating btn-flat red closeModal modal-close">
               <i className="material-icons">close</i>
             </a>
           </div>

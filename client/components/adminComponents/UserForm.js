@@ -129,12 +129,12 @@ class UserForm extends React.Component {
                 icon="save"
                 type="submit"
                 value="Save"
-                className="btn waves-effect waves-light blue-grey"
+                className="btn waves-effect waves-light brown"
                 onClick={this.updateUser} />
               <input
                 type="submit"
                 value="Cancel"
-                className="btn waves-effect waves-light blue-grey"
+                className="btn waves-effect waves-light red"
                 onClick={this.props.cancel} />
             </div>
           </div>

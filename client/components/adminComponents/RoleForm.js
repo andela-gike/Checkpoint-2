@@ -100,12 +100,12 @@ class RoleForm extends React.Component {
                 id="btnSave"
                 type="submit"
                 value="Save"
-                className="btn waves-effect waves-light blue-grey"
+                className="btn waves-effect waves-light brown"
                 onClick={id ? this.updateRole : this.saveRole} />
               <input
                 type="submit"
                 value="Cancel"
-                className="btn waves-effect waves-light blue-grey"
+                className="btn waves-effect waves-light red"
                 onClick={this.props.cancel} />
             </div>
           </div>

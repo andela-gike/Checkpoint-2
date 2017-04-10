@@ -77,7 +77,7 @@ function mapStateToProps({
   let personalDocuments = [];
   if (isAuthenticated) {
     personalDocuments = documents.filter(
-      doc => doc.ownerId === user.userId);
+      doc => doc.userId === user.userId);
   }
 
   const publicDocuments = documents.filter(

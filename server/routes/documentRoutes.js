@@ -15,5 +15,8 @@ documentRouter.route('/:id')
   .put(Authentication.verifyUser, DocumentController.updateDocument)
   .delete(Authentication.verifyUser, DocumentController.deleteDocument);
 
+documentRouter.route('/users/:id')
+  .get(Authentication.verifyUser, DocumentController.findUserDocuments);
+
 
 export default documentRouter;

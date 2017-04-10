@@ -71,7 +71,7 @@ export function deleteCurrentDocument() {
  */
 export function loadUserDocuments(userId) {
   console.log(userId);
-  return dispatch => axios.get(`/api/users/${userId}/document`)
+  return dispatch => axios.get(`/api/documents/users/${userId}`)
     .then((response) => {
       dispatch(loadDocumentSuccess(response.data));
     }).catch((error) => {

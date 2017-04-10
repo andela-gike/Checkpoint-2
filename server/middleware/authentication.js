@@ -27,7 +27,7 @@ const Authentication = {
     db.roles
       .findById(request.decodedToken.roleId)
       .then((role) => {
-        if (role.title === 'admin') {
+        if (role.title === 'admin' || role.id === 1) {
           next();
         } else {
           return response.status(403).send({

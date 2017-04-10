@@ -28,7 +28,7 @@ class DocList extends Component {
 
   deleteDocument(id) {
     const { user: { userId } } = this.props;
-    const result = confirm('Do you want to delete this docuement?');
+    const result = confirm('Do you want to delete this document?');
     if (result) {
       this.props.deleteDocument(id, userId)
         .then(() => toastr.success('Document Successfully Deleted'));
