@@ -14,18 +14,6 @@ export function loadDocumentSuccess(document) {
   };
 }
 
-/**
- * Create document success action creator
- * @export
- * @param {any} document
- * @returns {object} action
- */
-export function createDocumentSuccess(document) {
-  return {
-    type: types.CREATE_DOCUMENT_SUCCESS,
-    document
-  };
-}
 
 /**
  * Update document success action creator
@@ -70,7 +58,6 @@ export function deleteCurrentDocument() {
  * @returns {function} documents
  */
 export function loadUserDocuments(userId) {
-  console.log(userId);
   return dispatch => axios.get(`/api/documents/users/${userId}`)
     .then((response) => {
       dispatch(loadDocumentSuccess(response.data));
@@ -130,6 +117,15 @@ export function deleteDocument(id, userId) {
   return dispatch => axios.delete(`/api/documents/${id}`)
     .then(() => {
       dispatch(loadUserDocuments(userId));
+    }).catch((error) => {
+      throw (error);
+    });
+}
+
+export function searchDocuments(query) {
+  return dispatch => axios.get(`/api/documents/search?query=${query}`)
+    .then((response) => {
+      dispatch(loadDocumentSuccess(response.data));
     }).catch((error) => {
       throw (error);
     });

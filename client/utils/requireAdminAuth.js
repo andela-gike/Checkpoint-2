@@ -12,7 +12,7 @@ export default function (ComposedComponent) {
         });
         this.context.router.push('/login');
       }
-      if (this.props.isAuthenticated && this.props.isAdmin !== 1) {
+      if (this.props.isAuthenticated && this.props.isAdmin !== '1') {
         this.props.addFlashMessage({
           type: 'error',
           text: 'Only Admin has rights to access this page'

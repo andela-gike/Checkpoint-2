@@ -71,7 +71,7 @@ class ManangeRolePage extends React.Component {
         <div className="row">
           <div className="col s12">
             <div className="col s12 z-depth-5 card-panel card-body">
-              <h4 className="center">Manage Role Details and Permissions</h4>
+              <h4 className="center">Manage Role Details</h4>
               <div className="row manage-user">
                 <div className="col user-list">
                   <RoleList editRole={this.renderRoleForm} deleteRole={this.renderAlert} roles={roles} />
