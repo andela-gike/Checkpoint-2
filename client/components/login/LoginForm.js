@@ -76,7 +76,7 @@ class LoginForm extends React.Component {
           </div>
 
           <div className="center-align">
-            <button disabled={isLoading} className="btn brown">
+            <button disabled={isLoading} className="btn brown" type="submit">
               Login<i className="material-icons right">thumb_up</i>
             </button>
           {errors.form && <div className="card-panel red darken-1">{errors.form}</div>}

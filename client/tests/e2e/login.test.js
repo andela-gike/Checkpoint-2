@@ -16,8 +16,8 @@ module.exports = {
     browser
       .url('http://localhost:6060/login')
       .waitForElementVisible('body')
-      .setValue('input[type=text]', 'admin')
-      .setValue('input[type=password]', 'adminkey')
+      .setValue('input[type=text]', 'admin@example.com')
+      .setValue('input[type=password]', '123456')
       .click('button[type="submit"]')
       .waitForElementVisible('h4')
       .assert.urlEquals('http://localhost:6060/login')
@@ -45,8 +45,8 @@ module.exports = {
     browser
       .url('http://localhost:6060/dashboard')
       .waitForElementVisible('body')
-      .setValue('input[type=text]', 'eseohe@gmail.com')
-      .setValue('input[type=password]', 'thequeeness')
+      .setValue('input[type=text]', 'testing@gmail.com')
+      .setValue('input[type=password]', '1234567890')
       .click('button[type="submit"]')
       .waitForElementVisible('nav', 5000)
       .assert.urlEquals('http://localhost:6060/login')

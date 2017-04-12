@@ -21,7 +21,7 @@ module.exports = {
       .moveToElement('li[id="personalDocs"]', 0, 0)
       .mouseButtonClick(0)
       .waitForElementVisible('div[id="card-alert"]', 5000)
-      .assert.urlEquals('http://localhost:6060/document')
+      .assert.urlEquals('http://localhost:6060/documents')
       .assert.containsText('h4', 'Saved Documents')
       .assert.containsText('div[id="card-alert"]',
       'INFO : You have 0 Saved Documents')

@@ -110,6 +110,7 @@ class SignupForm extends React.Component {
             checkUserExists={this.checkUserExists}
             value={this.state.email}
             field="email"
+            type="email"
           />
         </div>
 
@@ -151,7 +152,7 @@ class SignupForm extends React.Component {
 
         <div className="center-align">
           <button disabled={this.state.isLoading || this.state.invalid}
-            className="btn brown">
+            className="btn brown" type="submit">
             Sign Up<i className="material-icons right">thumb_up</i>
           </button>
         </div>

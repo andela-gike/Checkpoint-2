@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites errors="0"
+            failures="1"
+            tests="4">
+
+  <testsuite name="login.test"
+    errors="0" failures="1" hostname="" id="" package="login.test" skipped="1"
+    tests="4" time="10.99" timestamp="Wed, 12 Apr 2017 17:47:13 GMT">
+  
+    <testcase name="Document Management System" classname="login.test" time="3.760" assertions="2">
+
+    
+
+    
+    </testcase>
+  
+    <testcase name="Login Users" classname="login.test" time="3.327" assertions="3">
+
+    
+
+    
+
+    
+    </testcase>
+  
+    <testcase name="Admin Dashboard Page" classname="login.test" time="3.901" assertions="5">
+
+    
+
+    
+
+    
+
+      <failure message="Testing if element &lt;nav&gt; contains text: &quot;Saved Documents&quot;.">    at Object.Admin Dashboard Page (/Users/ikegrace/Documents/Checkpoint-2/client/tests/e2e/login.test.js:37:15)
+    at _combinedTickCallback (internal/process/next_tick.js:67:7)</failure>
+
+    
+    </testcase>
+  
+  
+    
+    <testcase
+      name="Regular Users Dashboard Page" classname="login.test">
+      <skipped />
+    </testcase>
+    
+  
+  </testsuite>
+</testsuites>

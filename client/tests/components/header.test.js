@@ -58,14 +58,14 @@ describe('Header Component', () => {
       expect(isAdmin).to.equal(false);
     });
     it('should return correct props if user is authenticated', () => {
-      const mockState = { auth: { isAuthenticated: true, user: { userRoleId: 2 } } };
+      const mockState = { auth: { isAuthenticated: true, user: { userRoleId: '2' } } };
       const { isAuthenticated, user, isAdmin } = mapStateToProps(mockState);
       expect(isAuthenticated).to.equal(true);
       expect(user).to.be.defined; //eslint-disable-line
       expect(isAdmin).to.equal(false);
     });
     it('should return correct props if user is authenticated', () => {
-      const mockState = { auth: { isAuthenticated: true, user: { userRoleId: 1 } } };
+      const mockState = { auth: { isAuthenticated: true, user: { userRoleId: '1' } } };
       const { isAuthenticated, user, isAdmin } = mapStateToProps(mockState);
       expect(isAuthenticated).to.equal(true);
       expect(user).to.be.defined;  //eslint-disable-line
