@@ -76,7 +76,8 @@
     "supertest": "^3.0.0",
     "toastr": "^2.1.2",
     "validator": "^7.0.0",
-    "webpack": "^1.14.0"
+    "webpack": "^1.14.0",
+    "webpack-dev-middleware": "^1.10.1"
   },
   "devDependencies": {
     "babel-istanbul": "^0.12.2",
