@@ -113,7 +113,7 @@ const DocumentController = {
     const docAttributes = {
       doc: ['id', 'title', 'content', 'access',
         'userId', 'createdAt', 'updatedAt'],
-      user: ['id', 'userName']
+      user: ['userId', 'userName']
     };
     let query;
     if (request.decodedToken.roleId === 1) {
@@ -138,17 +138,9 @@ const DocumentController = {
       })
       .then((docs) => {
         if (request.decodedToken.roleId === 1) {
-          response.status(200).send({
-            message:
-            'Showing all documents',
-            data: docs
-          });
+          response.status(200).send(docs);
         } else {
-          response.status(200).send({
-            message:
-            'Showing all public documents',
-            data: docs
-          });
+          response.status(200).send(docs);
         }
       });
   },

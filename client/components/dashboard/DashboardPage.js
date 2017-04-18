@@ -95,8 +95,10 @@ DashboardPage.propTypes = {
   loadAllDocuments: PropTypes.func.isRequired,
 };
 
+
 const filterDocument = (role, documents) =>
   documents.filter(doc => doc.access === role);
+
 
 
 /**

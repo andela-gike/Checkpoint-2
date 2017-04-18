@@ -8,6 +8,15 @@ import CommonModal from '../common/CommonModal';
 
 class DocumentPage extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      doc: {}
+    };
+
+    this.addNewDocument = this.addNewDocument.bind(this);
+  }
+
   componentWillMount() {
     const { userId } = this.props.user;
     this.props.actions.loadUserDocuments(userId);
@@ -19,12 +28,11 @@ class DocumentPage extends React.Component {
     $('.tooltipped').tooltip({ delay: 50 });
   }
 
-
-  addNewDocument(e) {
-    e.preventDefault();
-    $('#docDisplayModal').modal('open');
+  addNewDocument(doc = {}) {
+    this.setState({ doc }, () => {
+      $('#docDisplayModal').modal('open');
+    });
   }
-
 
   render() {
     const { personalDocuments } = this.props;
@@ -45,13 +53,13 @@ class DocumentPage extends React.Component {
                   </div>
                 </div>
                 <div className="col s12">
-                  <DocList docs={personalDocuments} />
+                  <DocList showModal={this.addNewDocument} docs={personalDocuments} />
                 </div>
               </div>
             </div>
 
           </div>
-          <CommonModal />
+          <CommonModal doc={this.state.doc}/>
         </div>
       </div>
     );
@@ -60,8 +68,6 @@ class DocumentPage extends React.Component {
 
 DocumentPage.propTypes = {
   personalDocuments: PropTypes.array.isRequired,
-  publicDocuments: PropTypes.array,
-  currentDocument: PropTypes.object,
   user: PropTypes.object.isRequired,
   actions: PropTypes.object.isRequired,
 };
@@ -79,7 +85,6 @@ function mapStateToProps({
     personalDocuments = documents.filter(
       doc => doc.userId === user.userId);
   }
-
   const publicDocuments = documents.filter(
     doc => doc.access === 'public');
 
