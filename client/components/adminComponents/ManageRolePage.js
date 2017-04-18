@@ -106,7 +106,6 @@ ManangeRolePage.propTypes = {
  * @returns {any}
  */
 function mapStateToProps(state) {
-  console.log(state.manageRoles);
   const { roles } = state.manageRoles;
   return {
     roles

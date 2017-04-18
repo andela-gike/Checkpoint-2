@@ -20,11 +20,7 @@ const RoleController = {
       return db.roles
       .create(roleData)
       .then((role) => {
-        response.status(201).send({
-          message:
-          'The role was successfully created',
-          role
-        });
+        response.status(201).send(role);
       })
       .catch((err) => {
         response.status(400).send({ message:
@@ -80,9 +76,7 @@ const RoleController = {
     db.roles
       .findAll()
       .then((allRoles) => {
-        response.status(200).send({ message:
-          'This is a list of the available roles',
-          data: allRoles });
+        response.status(200).send(allRoles);
       })
       .catch((err) => {
         response.status(404).send({ message:

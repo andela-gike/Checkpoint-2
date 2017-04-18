@@ -69,7 +69,7 @@ class HandleUsersPage extends React.Component {
         <div className="row">
           <div className="col s12">
             <div className="col s12 z-depth-5 card-panel card-body">
-              <h4 className="center">Manage User Details </h4>
+              <h4 className="center">Manage User Details</h4>
               <div className="row manage-user">
                 <div className="col user-list">
                   <UserList editUser={this.renderUserForm} deleteUser={this.renderAlert} users={users} />

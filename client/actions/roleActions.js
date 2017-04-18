@@ -33,6 +33,7 @@ export function loadRoles() {
  * @return {object}
  */
 export function saveRole(role) {
+  console.log(role);
   return dispatch => axios.post('/api/roles', role)
     .then(() => {
       dispatch(loadRoles());
