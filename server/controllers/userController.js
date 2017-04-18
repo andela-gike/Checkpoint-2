@@ -144,10 +144,7 @@ const UserController = {
       .findAll({ query, limit: query.limit, offset: query.offset })
       .then((allUsers) => {
         if (allUsers) {
-          response.status(200).send({
-            message: 'Listing available users',
-            allUsers
-          });
+          response.status(200).send(allUsers);
         }
       })
       .catch((err) => {

@@ -11,12 +11,12 @@ const UserList = ({ users, editUser, deleteUser }) =>
               <div className="row user-collection-item">
                 <div className="col s4 offset s2 email">{user.email}</div>
                 <div className="col s2 name">{user.userName}</div>
-                <div className="col s1 role">{user.Role.title}</div>
+                <div className="col s1 role">{user.roleId}</div>
                 <div className="user-buttons row col s3">
-                  <a className={`waves-effect waves-light btn brown ${addDisabledClass(user.Role.title, disabledUsers)}`}
+                  <a className={`waves-effect waves-light btn brown ${addDisabledClass(user.roleId, disabledUsers)}`}
                     onClick={() => editUser(user)}>
                     <i className="tiny material-icons left">edit</i>edit</a>
-                  <a className={`waves-effect waves-light btn red ${addDisabledClass(user.Role.title, disabledUsers)}`}
+                  <a className={`waves-effect waves-light btn red ${addDisabledClass(user.roleId, disabledUsers)}`}
                     onClick={() => deleteUser(user.id)}>
                     <i className="tiny material-icons left">delete</i>delete</a>
                 </div>
@@ -30,7 +30,6 @@ const UserList = ({ users, editUser, deleteUser }) =>
 UserList.propTypes = {
   editUser: PropTypes.func.isRequired,
   deleteUser: PropTypes.func.isRequired,
-  users: React.PropTypes.array.isRequired
 };
 
 export default UserList;
