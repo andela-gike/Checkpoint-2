@@ -157,19 +157,11 @@ const DocumentController = {
         }
         if (doc.access === 'public' || doc.userId ===
           request.decodedToken.userId) {
-          return response.status(200).send({
-            message:
-            'Document found!',
-            data: doc
-          });
+          return response.status(200).send(doc);
         }
         if (doc.access === 'role' && doc.userRoleId ===
           request.decodedToken.roleId) {
-          return response.status(200).send({
-            message:
-            'Document found!',
-            data: doc
-          });
+          return response.status(200).send(doc);
         }
         response.status(401).send({ message: 'Permission denied' });
       });
