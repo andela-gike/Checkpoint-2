@@ -1,0 +1,15 @@
+sudo: true
+
+language: node_js
+
+node_js: "6"
+
+before_install:
+  - psql -c 'drop database if exists docmandev;' -U postgres
+  - psql -c 'create database docmandev;' -U postgres
+services:
+  - postgresql
+script:
+  - npm test
+addons:
+  postgresql: "9.3"
