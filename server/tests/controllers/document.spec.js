@@ -35,7 +35,7 @@ describe('Document API Spec', () => {
   after(() => models.sequelize.sync({ force: false }));
 
   describe('Create Documents by making POST request', () => {
-    it('should allow a user to create a document', (done) => {
+    it('should allow a user to create a document', () => {
       request.post('/api/documents')
         .set('authorization', regularUserToken)
         .send({
@@ -46,21 +46,19 @@ describe('Document API Spec', () => {
           expect(response.body).be.an('object');
           expect(response.body.message).to.equal('Document created successfully');
           expect(response.body.data).to.have.property('createdAt');
-          done();
         });
     });
-    it('should prevent a non-logged in user from creating documents', (done) => {
+    it('should prevent a non-logged in user from creating documents', () => {
       request.post('/api/documents')
         .send(docs[0])
         .expect(401)
         .end((err, response) => {
           expect(response.body).to.be.an('object');
           expect(response.body.message).to.equal('No token was provided');
-          done();
         });
     });
     it(`should notify the user with a message if both fields
-    are blank`, (done) => {
+    are blank`, () => {
       request.post('/api/documents')
         .set('authorization', adminUserToken)
         .send({
@@ -72,10 +70,9 @@ describe('Document API Spec', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.message).to
           .equal('The title or the content of the document is empty');
-          done();
         });
     });
-    it('should ensure the title field is not blank', (done) => {
+    it('should ensure the title field is not blank', () => {
       request.post('/api/documents')
         .set('authorization', adminUserToken)
         .send({
@@ -87,10 +84,9 @@ describe('Document API Spec', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.message).to
           .equal('The title or the content of the document is empty');
-          done();
         });
     });
-    it('should ensure the content field is not blank', (done) => {
+    it('should ensure the content field is not blank', () => {
       request.post('/api/documents')
         .set('authorization', adminUserToken)
         .send({
@@ -102,10 +98,9 @@ describe('Document API Spec', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.message).to
           .equal('The title or the content of the document is empty');
-          done();
         });
     });
-    it('should ensure that a document with the same title is not created twice', (done) => {
+    it('should ensure that a document with the same title is not created twice', () => {
       request.post('/api/documents')
         .set('authorization', adminUserToken)
         .send(docs[2])
@@ -114,13 +109,12 @@ describe('Document API Spec', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.message).to
             .equal('This document already exists');
-          done();
         });
     });
   });
 
   describe('making a PUT request to update a document details/content', () => {
-    it('Should notify the user if the document was not found', (done) => {
+    it('Should notify the user if the document was not found', () => {
       request.put('/api/documents/6753')
         .set('authorization', regularUserToken)
         .send({
@@ -132,10 +126,9 @@ describe('Document API Spec', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.message).to
             .equal('Cannot update a document that does not exist');
-          done();
         });
     });
-    it('should allow the owner of the document to update it', (done) => {
+    it('should allow the owner of the document to update it', () => {
       request.put('/api/documents/6')
         .set('authorization', regularUserToken)
         .send({
@@ -148,10 +141,9 @@ describe('Document API Spec', () => {
           expect(response.body.message).to
           .equal('The document was updated successfully');
           expect(response.body.data).to.exist;
-          done();
         });
     });
-    it('should not allow updating if both title and content fields are blank', (done) => {
+    it('should not allow updating if both title and content fields are blank', () => {
       request.put('/api/documents/6')
         .set('authorization', regularUserToken)
         .send({
@@ -162,13 +154,12 @@ describe('Document API Spec', () => {
         .end((err, response) => {
           expect(response.body).to.be.an('object');
           expect(response.body.message).to.equal('No update detected');
-          done();
         });
     });
   });
 
   describe('making a DELETE request to  Documents', () => {
-    it('should fail if the document wasn\'t found', (done) => {
+    it('should fail if the document wasn\'t found', () => {
       request.delete('/api/documents/6753')
         .set('authorization', regularUserToken)
         .expect(404)
@@ -176,86 +167,77 @@ describe('Document API Spec', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.message).to
             .equal('Cannot delete a document that does not exist');
-          done();
         });
     });
-    it('should allow the document owner to delete their document', (done) => {
+    it('should allow the document owner to delete their document', () => {
       request.delete('/api/documents/6')
         .set('authorization', regularUserToken)
         .expect(200)
         .end((err, response) => {
           expect(response.body).to.be.an('object');
           expect(response.body.message).to.equal('The document was deleted successfully');
-          done();
         });
     });
-    it('should not allow non-logged in users to delete documents', (done) => {
+    it('should not allow non-logged in users to delete documents', () => {
       request.delete('/api/documents/5')
       .expect(401)
         .end((err, response) => {
           expect(response.body).to.be.an('object');
           expect(response.body.message).to.equal('No token was provided');
-          done();
         });
     });
   });
 
   describe('View Documents', () => {
-    it('should allow a regular user to view public documents', (done) => {
+    it('should allow a regular user to view public documents', () => {
       request.get('/api/documents')
         .set('authorization', regularUserToken)
         .end((err, response) => {
           expect(response.body.status).to.equal(200);
-          done();
         });
     });
-    it('Should return documents starting from the most recent', (done) => {
+    it('Should return documents starting from the most recent', () => {
       request.get('/api/documents')
         .set('authorization', adminUserToken)
         .end((err, response) => {
           expect(response.body.status).to.equal(200);
-          done();
         });
     });
-    it('Should return a user document when a user needs is', (done) => {
+    it('Should return a user document when a user needs is', () => {
       request.get('/api/documents/users/3')
         .set('authorization', adminUserToken)
         .expect(200)
         .end((err, response) => {
           expect(Array.isArray(response.body)).to.be.true;
           expect(response.body.length).to.be.greaterThan(0);
-          done();
         });
     });
-    it('should allow a regular user access to a public document', (done) => {
+    it('should allow a regular user access to a public document', () => {
       request.get('/api/documents/1')
         .set('authorization', regularUserToken)
         .end((err, response) => {
           expect(response.body.status).to.equal(200);
-          done();
         });
     });
-    it('should not allow a regular user access to a private document', (done) => {
+    it('should not allow a regular user access to a private document', () => {
       request.get('/api/documents/2')
         .set('authorization', regularUserToken)
         .expect(401)
         .end((err, response) => {
           expect(response.body).to.be.an('object');
           expect(response.body.message).to.equal('Permission denied');
-          done();
         });
     });
-    it('should allow a regular user access to a private document they own', (done) => {
+    it('should allow a regular user access to a private document they own', () => {
       request.get('/api/documents/3')
         .set('authorization', regularUserToken)
         .expect(200)
         .end((err, response) => {
           expect(response.body).to.be.an('object');
           expect(response.body.message).to.equal('Document found!');
-          done();
         });
     });
-    it('should return a message if the document doesn\'t exist', (done) => {
+    it('should return a message if the document doesn\'t exist', () => {
       request.get('/api/documents/3432')
         .set('authorization', regularUserToken)
         .expect(404)
@@ -263,7 +245,6 @@ describe('Document API Spec', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.message).to
             .equal('Document with the id: 3432 does not exist');
-          done();
         });
     });
   });

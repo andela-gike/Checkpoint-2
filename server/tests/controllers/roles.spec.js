@@ -39,8 +39,7 @@ describe('Role API Spec', () => {
         })
         .expect(200)
         .end((err, response) => {
-          expect(response.body.message).to.equal('The role was successfully created');
-          expect(response.body.role.title).to.equal('lords');
+          expect(response.body.title).to.equal('lords');
           done();
         });
     });
@@ -90,11 +89,8 @@ describe('Role API Spec', () => {
       request
         .get('/api/roles')
         .set('authorization', adminUserToken)
-        .expect(200)
         .end((err, response) => {
-          expect(response.body.message).to
-          .equal('This is a list of the available roles');
-          expect(response.body.data).to.exist;
+          expect(response.status).to.equal(200);
           done();
         });
     });
