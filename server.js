@@ -3,6 +3,7 @@ import webpack from 'webpack';
 import express from 'express';
 import path from 'path';
 import open from 'open';
+import 'webpack-hot-middleware';
 import config from './webpack.config.dev';
 import app from './server/routes/index';
 
