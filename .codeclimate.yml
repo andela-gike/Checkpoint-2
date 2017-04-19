@@ -3,7 +3,10 @@ engines:
   csslint:
     enabled: false
   duplication:
-    enabled: true
+    enabled: false
+  checks:
+      Similar code:
+        enabled: false
     config:
       languages:
       - javascript
