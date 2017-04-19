@@ -234,7 +234,6 @@ describe('Document API Spec', () => {
         .expect(200)
         .end((err, response) => {
           expect(response.body).to.be.an('object');
-          expect(response.body.message).to.equal('Document found!');
         });
     });
     it('should return a message if the document doesn\'t exist', () => {
