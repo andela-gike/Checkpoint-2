@@ -4,9 +4,6 @@ engines:
     enabled: false
   duplication:
     enabled: false
-  checks:
-      Similar code:
-        enabled: false
     config:
       languages:
       - javascript
