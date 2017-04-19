@@ -1,7 +1,6 @@
 import { expect } from 'chai';
 import supertest from 'supertest';
-import app from '../../../server';
-
+import app from '../../routes/index';
 
 const request = supertest.agent(app);
 
