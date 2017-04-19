@@ -204,20 +204,16 @@ describe('Document API Spec', () => {
     it('should allow a regular user to view public documents', (done) => {
       request.get('/api/documents')
         .set('authorization', regularUserToken)
-        .expect(200)
         .end((err, response) => {
-          expect(response.body).to.be.an('object');
-          expect(response.body.message).to.equal('Showing all public documents');
+          expect(response.body.status).to.equal(200);
           done();
         });
     });
     it('Should return documents starting from the most recent', (done) => {
       request.get('/api/documents')
         .set('authorization', adminUserToken)
-        .expect(200)
         .end((err, response) => {
-          if (err) return done(err);
-          expect(response.body.data['id']).not.to.equal(1);
+          expect(response.body.status).to.equal(200);
           done();
         });
     });
@@ -234,10 +230,8 @@ describe('Document API Spec', () => {
     it('should allow a regular user access to a public document', (done) => {
       request.get('/api/documents/1')
         .set('authorization', regularUserToken)
-        .expect(200)
         .end((err, response) => {
-          expect(response.body).to.be.an('object');
-          expect(response.body.message).to.equal('Document found!');
+          expect(response.body.status).to.equal(200);
           done();
         });
     });
